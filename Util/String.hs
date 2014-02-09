@@ -1,6 +1,7 @@
 module Util.String 
     ( pack 
-    , unpack ) where
+    , unpack 
+    ) where
 
 import UHC.Base            ( PackedString, packedStringToString )
 
