@@ -59,7 +59,7 @@ appendChild :: Element   -- ^ Parent node
 appendChild = __appendChild
 
 (~>) :: Element -> Element -> IO ()
-(~>) = __appendChild
+(~>) = flip __appendChild
 
 -- | Add or set the attribute/value pair on the provided target element. 
 setAttribute :: Element    -- ^ An element
