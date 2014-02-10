@@ -2,7 +2,8 @@ module Util.FRP
     ( module Control.Applicative
     , Signal
     , attach
-    , valueProperty
+    , inputValue
+    , inputValue'
     ) where
 
 import Control.Applicative         ( Applicative, pure, (<$>), (<*>) )
@@ -29,24 +30,19 @@ instance Applicative Signal where
         , poll  = p1 <*> p2
         }
 
-attach :: Signal (IO a) -> IO a
-attach (Signal [] v) = v >>= id 
+attach :: Signal (IO a) -> IO ()
+attach (Signal [] v) = v >>= id >> return ()
 attach (Signal (x:xs) v) = do
     let (e, ev) = x
     __addEventListener e (pack ev) $ __wrap 
         $ v >>= id
     attach (Signal xs v)
 
--- attach :: Signal (IO a) -> IO ()
--- attach (Signal [] v) = v >>= id >> return ()
--- attach (Signal (x:xs) v) = do
---     let (e, ev) = x
---     __addEventListener e (pack ev) $ __wrap 
---         $ v >>= id
---     attach (Signal xs v)
+inputValue :: Element -> Signal String
+inputValue = fmap unpack . inputValue' 
 
-valueProperty :: Element -> Signal PackedString
-valueProperty e = 
+inputValue' :: Element -> Signal PackedString
+inputValue' e = 
     let s = Signal { event = [(e, "input")]
                    , poll  = return e }
     in  fmap __val s 
