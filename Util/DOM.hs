@@ -5,9 +5,12 @@ module Util.DOM
     , setInnerHtml
     , setInnerHtml'
     , documentBody
+    , window
     , appendChild
     , setAttribute
     , setAttribute'
+    , setValue
+    , setValue'
     , toString
     , toString'
     , innerHtml
@@ -52,6 +55,10 @@ _setInnerHtml = __set $ pack "innerHTML"
 documentBody :: IO Element
 documentBody = __body
 
+-- | Retrieve the window element.
+window :: IO Element
+window = __window
+
 -- | Add an element after the last child node of the specified element.
 appendChild :: Element   -- ^ Parent node
             -> Element   -- ^ The child element
@@ -73,6 +80,13 @@ setAttribute' :: Element          -- ^ An element
               -> PackedString     -- ^ Attribute value
               -> IO ()
 setAttribute' = __setAttribute 
+
+-- | Set the value attribute of an element (typically an input field).
+setValue :: Element -> String -> IO ()
+setValue e v = __set (pack "value") (pack v) e >> return ()
+
+setValue' :: Element -> PackedString -> IO ()
+setValue' e v = __set (pack "value") v e >> return ()
 
 -- | Stringify an element.
 toString :: Element -> IO String
@@ -153,6 +167,9 @@ foreign import js "%1.setAttribute(%*)"
 
 foreign import js "document.body"
     __body :: IO Element
+
+foreign import js "window"
+    __window :: IO Element
 
 foreign import js "%1.toString"
     __toString :: Element -> IO PackedString

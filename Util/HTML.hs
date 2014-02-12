@@ -104,13 +104,13 @@ toHtml :: String -> HtmlM a
 toHtml = Content
 
 makeAttr :: String -> String -> Attribute
-makeAttr a = Attribute a (" " ++ a ++ "=\"")
+makeAttr a = Attribute a (' ':a ++ "=\"")
 
 makePar :: String -> Html -> Html
-makePar h = Parent h ("<" ++ h) ">" ("</" ++ h ++ ">")
+makePar h = Parent h ('<':h) ">" ("</" ++ h ++ ">")
 
 makeLeaf :: String -> Html
-makeLeaf a = Leaf a ("<" ++ a) ">"
+makeLeaf a = Leaf a ('<':a) ">"
 
 -- Shorthand infix operator
 
