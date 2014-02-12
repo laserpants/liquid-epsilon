@@ -1,4 +1,3 @@
-{-# LANGUAGE FlexibleInstances #-}
 module Util.JSON 
     ( module Control.Applicative
     , FromJSON
