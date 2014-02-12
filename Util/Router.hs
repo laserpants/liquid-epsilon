@@ -9,6 +9,7 @@ module Util.Router
     , setMap
     , wrap
     , onLoad
+    , onReady
     , onHashChange
     ) where
 
@@ -93,10 +94,13 @@ foreign import js "window.location.hash"
     __locationHash :: IO PackedString
 
 foreign import js "wrapper"
-    wrap :: IO () -> IO (FunPtr (IO ()))
+    wrap :: IO a -> IO (FunPtr (IO a))
 
 foreign import js "window.addEventListener('load', %1, false)"
-    onLoad :: FunPtr (IO ()) -> IO ()
+    onLoad :: FunPtr (IO a) -> IO ()
+
+foreign import js "document.addEventListener('DOMContentLoaded', %1, false)"
+    onReady :: FunPtr (IO a) -> IO ()
 
 foreign import js "window.addEventListener('hashchange', %1, false)"
     onHashChange :: FunPtr (IO ()) -> IO ()

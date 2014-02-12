@@ -2,7 +2,7 @@ module Util.HTML.Elements where
 
 import Util.HTML
 
-a, article, aside, b, blockquote, body, button, canvas, code, dd, div, dl, dt, em, fieldset, footer, form, h1, h2, h3, h4, h5, h6, head, i, _label, menu, nav, ol, option, p, pre, q, section, select, span, sub, sup, table, tbody, td, textarea, tfoot, thead, title, tr, ul, video :: Html -> Html
+a, article, aside, b, blockquote, body, button, canvas, code, dd, div, dl, dt, em, fieldset, footer, form, h1, h2, h3, h4, h5, h6, head, i, _label, menu, nav, ol, option, p, pre, q, section, select, span, sub, sup, table, tbody, td, textarea, tfoot, thead, title, tr, ul, video, docTypeHtml :: Html -> Html
 
 a          = makePar "a"
 article    = makePar "article"
@@ -54,6 +54,8 @@ tr         = makePar "tr"
 ul         = makePar "ul"
 video      = makePar "video"
 
+docTypeHtml = (>>) $ makeLeaf "!DOCTYPE html"
+
 br, col, hr, img, input, nbsp, textarea' :: Html
 
 br         = makeLeaf "br"
@@ -64,3 +66,4 @@ input      = makeLeaf "input"
 
 nbsp       = leaf "nbsp" "&nbsp;" ""
 textarea'  = textarea $< ""
+

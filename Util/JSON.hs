@@ -221,6 +221,9 @@ instance FromJSON [Char] where
     fromJSON (Str v) = Just v
     fromJSON _ = Nothing
 
+instance FromJSON [[Char]] where
+    fromJSON = mapFrom 
+
 (.!) :: (FromJSON a) => Object -> String -> Maybe a
 (Obj obj) .! key = 
     case lookup key obj of
@@ -270,6 +273,9 @@ instance ToJSON [Bool] where
 
 instance ToJSON [Char] where
     toJSON = Str 
+
+instance ToJSON [[Char]] where
+    toJSON = mapTo
 
 obj :: [(String, Value)] -> Value
 obj = Object . Obj 

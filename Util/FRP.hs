@@ -43,7 +43,7 @@ attach (Signal (x:xs) v) = do
     let (e, ev) = x
     __addEventListener e (pack ev) $ __wrap1
         $ \obj -> do
-            -- Attach the event object to the element
+            -- Add the event object to the element
             setEventProperty obj e
             v >>= id
     attach (Signal xs v)
@@ -72,7 +72,7 @@ onSignal :: Signal a        -- ^ The "activating" signal
          -> Signal (IO b)
 onSignal s a = fmap (\_ f -> f) s <*> pure a
 
--- | Creates a signal for the String value of an input field.
+-- | Creates a signal for the value of an input field.
 inputValue :: Element -> Signal String
 inputValue = fmap unpack . inputValue' 
 
@@ -96,11 +96,11 @@ mouseSignal = let d = __document
                     True  -> (__clientX e, __clientY e)
                     False -> (0, 0)
 
--- | Window scroll X position.
+-- | Window scroll X position signal.
 scrollXSignal :: Signal Int
 scrollXSignal = _bindSignal "scroll" "scrollX" __window
 
--- | Window scroll Y position.
+-- | Window scroll Y position signal.
 scrollYSignal :: Signal Int
 scrollYSignal = _bindSignal "scroll" "scrollY" __window
 

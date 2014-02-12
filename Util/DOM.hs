@@ -4,6 +4,8 @@ module Util.DOM
     , createElement'
     , setInnerHtml
     , setInnerHtml'
+    , documentWrite
+    , documentWrite'
     , documentBody
     , window
     , appendChild
@@ -50,6 +52,13 @@ setInnerHtml' e html = _setInnerHtml html e
 
 _setInnerHtml :: PackedString -> Element -> IO Element
 _setInnerHtml = __set $ pack "innerHTML"
+
+-- | Writes HTML expressions or JavaScript code to a document.
+documentWrite :: String -> IO ()
+documentWrite = __documentWrite . pack 
+
+documentWrite' :: PackedString -> IO ()
+documentWrite' = __documentWrite
 
 -- | Retrieve the document body element.
 documentBody :: IO Element
@@ -206,6 +215,9 @@ foreign import js "%1.addEventListener(%2, %3, false)"
 
 foreign import js "%1.addEventListener('click', %2, false)"
     __onClick :: Element -> FunPtr (IO ()) -> IO ()
+
+foreign import js "document.write(%*)"
+    __documentWrite :: PackedString -> IO ()
 
 foreign import js "wrapper"
     __wrap :: IO () -> IO (FunPtr (IO ()))
