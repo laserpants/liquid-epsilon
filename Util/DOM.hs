@@ -27,6 +27,8 @@ module Util.DOM
     , addEventListener
     , addEventListener'
     , onClick
+    , setStyleProperty
+    , setStyleProperty'
     , (~>)
     ) where
 
@@ -165,6 +167,18 @@ onClick :: Element     -- ^ The target element
         -> IO ()
 onClick el f = __wrap f >>= __onClick el 
 
+data StylePtr
+type StyleObject = Ptr StylePtr
+
+-- | Set a property on an element's style object.
+setStyleProperty :: Element -> String -> String -> IO ()
+setStyleProperty e a v = setStyleProperty' e (pack a) (pack v)
+
+setStyleProperty' :: Element -> PackedString -> PackedString -> IO ()
+setStyleProperty' e a v = do
+    style <- __style e
+    __setStyleProperty style a v
+
 foreign import js "document.createElement(%*)"
     __createElement :: PackedString -> IO Element
 
@@ -221,4 +235,10 @@ foreign import js "document.write(%*)"
 
 foreign import js "wrapper"
     __wrap :: IO () -> IO (FunPtr (IO ()))
+
+foreign import js "%1.setProperty(%2, %3)"
+    __setStyleProperty :: StyleObject -> PackedString -> PackedString -> IO ()
+
+foreign import js "%1.style"
+    __style :: Element -> IO StyleObject
 

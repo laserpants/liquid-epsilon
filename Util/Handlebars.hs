@@ -1,7 +1,9 @@
 module Util.Handlebars 
-    ( compile
+    ( module Util.JSON
+    , compile
     , render
     , render'
+    , Collection
     ) where
 
 import UHC.Ptr
@@ -25,4 +27,6 @@ foreign import js "dynamic"
 
 foreign import js "JSON.parse(%*)" 
     __parse :: PackedString -> IO (Ptr a)
+
+newtype Collection a = Collection [a]
 

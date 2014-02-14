@@ -1,5 +1,6 @@
 module Util.Storage
-    ( set
+    ( module Util.JSON
+    , set
     , set'
     , get
     , get'

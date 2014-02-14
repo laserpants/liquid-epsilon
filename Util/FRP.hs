@@ -3,6 +3,7 @@ module Util.FRP
     , Signal
     , attach
     , _bindSignal
+    , _bindSignalOn
     , _bindUnitSignal
     , onSignal
     , inputValue
@@ -57,6 +58,18 @@ _bindSignal :: String      -- ^ The name of the event, e.g., 'change'
 _bindSignal ev prop e =
     let s = Signal { event = [(e, ev)]
                    , poll  = return e }
+    in  __prop <$> s <*> pure (pack prop)
+
+-- | Create a signal by binding an event associated with one element 
+-- to a property on another element.
+_bindSignalOn :: String      -- ^ The name of the event, e.g., 'change'
+              -> String      -- ^ Property to read from when the event is triggered.
+              -> Element     -- ^ The event element 
+              -> Element     -- ^ The property element
+              -> Signal a
+_bindSignalOn ev prop e e' =
+    let s = Signal { event = [(e, ev)]
+                   , poll  = return e' }
     in  __prop <$> s <*> pure (pack prop)
 
 -- | Create a signal of unit type, i.e., one which is not associated with a property, 
