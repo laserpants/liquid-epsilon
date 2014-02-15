@@ -11,6 +11,8 @@ module Util.DOM
     , appendChild
     , setAttribute
     , setAttribute'
+    , removeAttribute
+    , removeAttribute'
     , setValue
     , setValue'
     , toString
@@ -91,6 +93,15 @@ setAttribute' :: Element          -- ^ An element
               -> PackedString     -- ^ Attribute value
               -> IO ()
 setAttribute' = __setAttribute 
+
+-- | Remove an attribute from the element.
+removeAttribute :: Element       -- ^ An element
+                -> String        -- ^ Attribute name
+                -> IO ()
+removeAttribute e = removeAttribute' e . pack 
+
+removeAttribute' :: Element -> PackedString -> IO ()
+removeAttribute' = __removeAttribute 
 
 -- | Set the value attribute of an element (typically an input field).
 setValue :: Element -> String -> IO ()
@@ -187,6 +198,9 @@ foreign import js "%1.appendChild(%2)"
 
 foreign import js "%1.setAttribute(%*)"
     __setAttribute :: Element -> PackedString -> PackedString -> IO ()
+
+foreign import js "%1.removeAttribute(%*)"
+    __removeAttribute :: Element -> PackedString -> IO ()
 
 foreign import js "document.body"
     __body :: IO Element
