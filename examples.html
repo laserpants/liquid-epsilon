@@ -13,11 +13,9 @@
         h2 code, h3 code, h4 code { color: #333; }
         h4 { margin-top: 20px !important; }
         blockquote.intro { border:none; padding-left:0; margin-bottom:0; }
-
-        .jumbotron { text-align: center; } 
     </style>
 
-    <title>Liquid Epsilon</title>
+    <title>Liquid Epsilon Examples</title>
 
     <!-- Bootstrap core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -46,70 +44,35 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">Liquid Epsilon</a>
+          <a class="navbar-brand" href="/">Liquid Epsilon</a>
           <ul class="nav navbar-nav">
-            <li class="active"><a href="#">Home</a></li>
+            <li><a href="/">Home</a></li>
             <li><a href="manual.html">Manual</a></li>
             <li><a href="documentation.html">Documentation</a></li>
-            <li><a href="examples.html">Examples</a></li>
+            <li class="active"><a href="#">Examples</a></li>
             <li><a href="https://github.com/johanneshilden/liquid-epsilon">Download</a></li>
          </ul>
         </div>
       </div>
     </div>
 
-    <div class="jumbotron">
-      <div class="container" style="max-width: 800px;">
-          <p><img src="haskell-logo.png" alt="Haskell logo"></p>
-          <p>A collection of modules for building client-side web applications in <a href="http://www.haskell.org/">Haskell</a>, using the <a href="http://www.cs.uu.nl/wiki/UHC">Utrecht Haskell Compiler</a>. Following the functional programming paradigm, this library is designed for modern, single-page applications that run in the browser.</p>
-          <p><a class="btn btn-lg btn-success" href="https://github.com/johanneshilden/liquid-epsilon" role="button">Clone project from GitHub</a></p>
-      </div>
-    </div>
-
-    <div class="container">
-
+    <div class="container-fluid">
       <div class="row">
-        <div class="col-md-4">
-          <h2>Sales pitch</h2>
-          <p>
-          Liquid Epsilon is powered by <a href="http://www.cs.uu.nl/wiki/UHC">UHC-JS</a> &ndash; a project which enables translation of <a href="http://www.haskell.org/">Haskell</a> programs to JavaScript; making it possible to develop modern, single-page applications that run in all web browsers, using Haskell. This project provides various tools for doing so. 
-          </p>
+        <div class="main">
+          <h1 class="page-header">Examples</h2>
+
           <ul>
-              <li><a href="manual.html">Manual</a></li>
-              <li><a href="documentation.html">API Documentation</a></li>
+            <li><a href="examples/scroll-spy.html">Scroll spy</a></li>
+            <li><a href="examples/router.html">Router</a></li>
           </ul>
-        </div>
-        <div class="col-md-4">
-          <h2>Features</h2>
-          <ul>
-              <li>Easy <a href="manual.html#json">JSON</a> parsing and serialization &agrave; la Aeson</li>
-              <li><a href="manual.html#storage">Local storage</a> persistence of Haskell data (including user-defined types)</li>
-              <li>Hashtag <a href="manual.html#router">routing</a> using <code>do</code>-notation</li>
-              <li><a href="manual.html#html">HTML-builder</a> with Blaze-like syntax</li>
-              <li><a href="manual.html#dom">DOM</a> manipulation API</li>
-              <li><a href="manual.html#frp">Functional reactive programming</a></li>
-          </ul>
-       </div>
-        <div class="col-md-4">
-          <h3>Examples</h3>
 
-          <pre><code style="font-size:12px;">module Main where
-import Util.Base
-
-main = do
-    wrap $ do
-        print "Hello world!"
-    >>= onReady</code></pre> 
-
-          <p><a class="btn btn-default" href="examples.html" role="button">View the examples</a></p>
-        </div>
-      </div>
-
-
-
+          <p>The <a href="manual.html">manual</a> also contains plenty of examples.</p>
 
 <hr>
 <p>&copy; 2014 Johannes Hild&eacute;n. Code licensed under <a href="https://github.com/johanneshilden/liquid-epsilon/blob/master/LICENSE">BSD</a>. 
+
+        </div>
+      </div>
     </div>
 
     <!-- Bootstrap core JavaScript

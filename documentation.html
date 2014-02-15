@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="../../assets/ico/favicon.ico">
+
+    <style type="text/css">
+        .anchor { display: block; position: relative; top: -40px; visibility: hidden; }
+        h2 code, h3 code, h4 code { color: #333; }
+        h4 { margin-top: 20px !important; }
+        h5 { font-weight: bold !important; }
+        blockquote.intro { border:none; padding-left:0; margin-bottom:0; }
+        code.api { color: #c7254e; } 
+        pre.api { border-radius: 0; padding: 7px 9px 5px 9px; background-color: #f9f2f4; border-color: #ecc; }
+    </style>
+
+    <title>Liquid Epsilon Documentation</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="css/dashboard.css" rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy this line! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">Liquid Epsilon</a>
+          <ul class="nav navbar-nav">
+            <li><a href="/">Home</a></li>
+            <li><a href="manual.html">Manual</a></li>
+            <li class="active"><a href="#">Documentation</a></li>
+            <li><a href="examples.html">Examples</a></li>
+            <li><a href="https://github.com/johanneshilden/liquid-epsilon">Download</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+          <ul class="nav nav-sidebar">
+            <li><a href="#util-base">Util.Base</a></li>
+            <li><a href="#util-dom">Util.DOM</a></li>
+            <li><a href="#util-frp">Util.FRP</a></li>
+            <li><a href="#util-html">Util.HTML</a></li>
+            <li><a href="#util-html-handlebars">Util.HTML.Handlebars</a></li>
+            <li><a href="#util-handlebars">Util.Handlebars</a></li>
+            <li><a href="#util-json">Util.JSON</a></li>
+            <li><a href="#util-router">Util.Router</a></li>
+            <li><a href="#util-storage">Util.Storage</a></li>
+            <li><a href="#util-string">Util.String</a></li>
+          </ul>
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+          <h1 class="page-header">API Documentation</h2>
+
+
+<a class="anchor" style="top: -70px;" id="util-base"></a>
+<h2>Util.Base</h2>
+<h4>Public function interface</h4>
+<ul>
+<li>addScripts</li>
+<li>addScript</li>
+</ul>
+<hr>
+<h4>addScripts</h4>
+<pre class="api"><code class="api">addScripts :: [String] -&gt; IO ()</code>
+</pre>
+<p>Used to dynamically add an external JavaScript file to your
+document.</p>
+<h4>addScript</h4>
+<pre class="api"><code class="api">addScript :: String -&gt; IO ()</code>
+</pre>
+<p>Used to dynamically add external JavaScript files to your
+document.</p>
+<h5>Example:</h5>
+<pre>
+<code>main :: IO ()
+main = do
+    addScript "../../js/handlebars.js"
+    wrap $ do
+        ...
+    &gt;&gt;= onLoad  -- We must use onLoad instead of onReady to wait for
+                -- the added scripts to load.</code>
+</pre>
+<a class="anchor" id="util-dom"></a>
+<hr>
+<h2>Util.DOM</h2>
+<p>Low-level DOM manipulation API</p>
+<h4>Public function interface</h4>
+<ul>
+   <li>createElement</li>
+   <li>setInnerHtml</li>
+   <li>documentWrite</li>
+   <li>documentBody</li>
+   <li>window</li>
+   <li>appendChild</li>
+   <li>(~&gt;)</li>
+   <li>setAttribute</li>
+   <li>removeAttribute</li>
+   <li>setValue</li>
+   <li>toString</li>
+   <li>innerHtml</li>
+   <li>createTextNode</li>
+   <li>parentElement</li>
+   <li>getElementById</li>
+   <li>getElementsByClassName</li>
+   <li>addEventListener</li>
+   <li>onClick</li>
+   <li>setStyleProperty</li>
+</ul>
+<hr>
+<h4>createElement</h4>
+<pre class="api"><code class="api">createElement :: String -&gt; IO Element
+createElement' :: PackedString -&gt; IO Element</code>
+</pre>
+<p>Create an element with the specified name.</p>
+<h4>setInnerHtml</h4>
+<pre class="api"><code class="api">setInnerHtml :: Element -&gt; String -&gt; IO Element
+setInnerHtml' :: Element -&gt; PackedString -&gt; IO Element</code>
+</pre>
+<p>Set the inner HTML of an element.</p>
+<h4>documentWrite</h4>
+<pre class="api"><code class="api">documentWrite :: String -&gt; IO ()
+documentWrite' :: PackedString -&gt; IO ()</code>
+</pre>
+<p>Writes HTML expressions or JavaScript code to a document.</p>
+<h4>documentBody</h4>
+<pre class="api"><code class="api">documentBody :: IO Element</code>
+</pre>
+<p>Retrieve the document body element.</p>
+<h4>window</h4>
+<pre class="api"><code class="api">window :: IO Element</code>
+</pre>
+<p>Retrieve the window element.</p>
+<h4>appendChild</h4>
+<pre class="api"><code class="api">appendChild :: Element   -- ^ Parent node
+            -&gt; Element   -- ^ The child element
+            -&gt; IO ()</code>
+</pre>
+<p>Add an element after the last child node of the specified
+element.</p>
+<h4>(~&gt;)</h4>
+<pre class="api"><code class="api">(~&gt;) :: Element -&gt; Element -&gt; IO ()</code>
+</pre>
+<p>The <code>~&gt;</code> operator is an infix version of <code>appendChild</code> with the arguments flipped.</p>
+<h4>setAttribute</h4>
+<pre class="api"><code class="api">setAttribute :: Element    -- ^ An element
+             -&gt; String     -- ^ Attribute name
+             -&gt; String     -- ^ Attribute value
+             -&gt; IO ()
+setAttribute' :: Element          -- ^ An element
+              -&gt; PackedString     -- ^ Attribute name
+              -&gt; PackedString     -- ^ Attribute value
+              -&gt; IO ()</code>
+</pre>
+<p>Add or set the attribute/value pair on the provided target
+element.</p>
+<h4>removeAttribute</h4>
+<pre class="api"><code class="api">removeAttribute :: Element       -- ^ An element
+                -&gt; String        -- ^ Attribute name
+                -&gt; IO ()
+removeAttribute' :: Element -&gt; PackedString -&gt; IO ()</code>
+</pre>
+<p>Remove an attribute from the element.</p>
+<h4>setValue</h4>
+<pre class="api"><code class="api">setValue :: Element -&gt; String -&gt; IO ()
+setValue' :: Element -&gt; PackedString -&gt; IO ()</code>
+</pre>
+<p>Set the value attribute of an element (typically an input
+field).</p>
+<h4>toString</h4>
+<pre class="api"><code class="api">toString :: Element -&gt; IO String
+toString' :: Element -&gt; IO PackedString</code>
+</pre>
+<p>Stringify an element.</p>
+<h4>innerHtml</h4>
+<pre class="api"><code class="api">innerHtml :: Element -&gt; IO String
+innerHtml' :: Element -&gt; IO PackedString</code>
+</pre>
+<p>Retrieve the HTML between the start and end tags of the
+object.</p>
+<h4>createTextNode</h4>
+<pre class="api"><code class="api">createTextNode :: String -&gt; IO Element
+createTextNode' :: PackedString -&gt; IO Element</code>
+</pre>
+<h4>parentElement</h4>
+<pre class="api"><code class="api">parentElement :: Element -&gt; IO (Maybe Element)</code>
+</pre>
+<p>Return the parent node of an element. This function returns a
+<code class="api">Maybe</code> value, since a parent element doesn't always
+exist.</p>
+<h4>getElementById</h4>
+<pre class="api"><code class="api">getElementById :: String -&gt; IO (Maybe Element)
+getElementById' :: PackedString -&gt; IO (Maybe Element)</code>
+</pre>
+<p>Return the element with the id attribute matching the specified
+value, if one exists. This function returns a <code class="api">Maybe
+Element</code> to properly handle cases where no element is
+found.</p>
+<h4>getElementsByClassName</h4>
+<pre class="api"><code class="api">getElementsByClassName :: String -&gt; IO [Element]
+getElementsByClassName' :: PackedString -&gt; IO [Element]</code>
+</pre>
+<p>Return a list of elements which matches the provided class
+name(s).</p>
+<h4>addEventListener</h4>
+<pre class="api"><code class="api">addEventListener :: Element   -- ^ The target element
+                 -&gt; String    -- ^ Event type
+                 -&gt; IO ()     -- ^ Callback action
+                 -&gt; IO ()
+addEventListener' :: Element -&gt; PackedString -&gt; IO () -&gt; IO ()</code>
+</pre>
+<p>Add an event listener to the provided element.</p>
+<h4>onClick</h4>
+<pre class="api"><code class="api">onClick :: Element     -- ^ The target element
+        -&gt; IO ()       -- ^ Callback action
+        -&gt; IO ()</code>
+</pre>
+<p>Add an onClick event listener to the provided element.</p>
+<h4>setStyleProperty</h4>
+<pre class="api"><code class="api">setStyleProperty :: Element -&gt; String -&gt; String -&gt; IO ()
+setStyleProperty' :: Element -&gt; PackedString -&gt; </code>
+</pre>
+<p>Set a property on an element's style object.</p>
+<a class="anchor" id="util-frp"></a>
+<hr>
+<h2>Util.FRP</h2>
+<p>Functional reactive programming library</p>
+<h4>Public function interface</h4>
+<ul>
+   <li>attach</li>
+   <li>_bindSignal</li>
+   <li>_bindSignalOn</li>
+   <li>_bindUnitSignal</li>
+   <li>onSignal</li>
+   <li>inputValue</li>
+   <li>clickSignal</li>
+   <li>mouseSignal</li>
+   <li>scrollXSignal</li>
+   <li>scrollYSignal</li>
+</ul>
+<hr>
+<h4>attach</h4>
+<pre class="api"><code class="api">attach :: Signal (IO a) -&gt; IO ()</code>
+</pre>
+<h4>_bindSignal</h4>
+<pre class="api"><code class="api">_bindSignal :: String      -- ^ The name of the event, e.g., 'change'
+            -&gt; String      -- ^ Property to read from when the event is triggered.
+            -&gt; Element     -- ^ A DOM element
+            -&gt; Signal a</code>
+</pre>
+<p>Create a signal by binding a specific event to a property on the
+given element. When implementing your own signals using <code>_bindSignal</code> you should always qualify the return type:</p>
+<pre>
+<code>scrollY :: Element -&gt; Signal Int
+scrollY = _bindSignal "scroll" "scrollY" </code>
+</pre>
+<h4>_bindSignalOn</h4>
+<pre class="api"><code class="api">_bindSignalOn :: String      -- ^ The name of the event, e.g., 'change'
+              -&gt; String      -- ^ Property to read from when the event is triggered.
+              -&gt; Element     -- ^ The event element 
+              -&gt; Element     -- ^ The property element
+              -&gt; Signal a</code>
+</pre>
+<p>Create a signal by binding an event associated with one element
+to a property on another element.</p>
+<h4>_bindUnitSignal</h4>
+<pre class="api"><code class="api">_bindUnitSignal :: String      -- ^ The name of the event, e.g., 'click'
+                -&gt; Element     -- ^ A HTML DOM element
+                -&gt; Signal ()</code>
+</pre>
+<p>Create a signal of unit type, i.e., one which is not associated
+with a property, but instead emits a simple () value.</p>
+<h4>onSignal</h4>
+<pre class="api"><code class="api">onSignal :: Signal a        -- ^ The "activating" signal
+         -&gt; IO b            -- ^ An action to trigger when the signal emits.
+         -&gt; Signal (IO b)</code>
+</pre>
+<p>Promote an IO action to a signal with the help of another
+signal.</p>
+<h4>inputValue</h4>
+<pre class="api"><code class="api">inputValue :: Element -&gt; Signal String
+inputValue' :: Element -&gt; Signal PackedString</code>
+</pre>
+<p>Creates a signal for the value of an input field.</p>
+<h4>clickSignal</h4>
+<pre class="api"><code class="api">clickSignal :: Element -&gt; Signal ()</code>
+</pre>
+<p>A signal that reacts to click events on an element.</p>
+<h4>mouseSignal</h4>
+<pre class="api"><code class="api">mouseSignal :: Signal (Int, Int)</code>
+</pre>
+<p>Mouse cursor position signal.</p>
+<h4>scrollXSignal</h4>
+<pre class="api"><code class="api">scrollXSignal :: Signal Int</code>
+</pre>
+<p>Window scroll X position signal.</p>
+<h4>scrollYSignal</h4>
+<pre class="api"><code class="api">scrollYSignal :: Signal Int</code>
+</pre>
+<p>Window scroll Y position signal.</p>
+<a class="anchor" id="util-html"></a>
+<hr>
+<h2>Util.HTML</h2>
+<p>HTML combinator library</p>
+<h4>Public function interface</h4>
+<ul>
+   <li>renderHtml</li>
+   <li>escapeHtmlEntities</li>
+   <li>attribute</li>
+   <li>empty</li>
+   <li>parent</li>
+   <li>leaf</li>
+   <li>toHtml</li>
+   <li>makeAttr</li>
+   <li>makePar</li>
+   <li>makeLeaf</li>
+   <li>($&lt;)</li>
+</ul>
+<hr>
+<pre class="api"><code class="api">type Html = HtmlM ()</code>
+</pre>
+<h4>renderHtml</h4>
+<pre class="api"><code class="api">renderHtml :: HtmlM t -&gt; String</code>
+</pre>
+<h4>escapeHtmlEntities</h4>
+<pre class="api"><code class="api">escapeHtmlEntities :: String -&gt; String</code>
+</pre>
+<h4>attribute</h4>
+<pre class="api"><code class="api">attribute :: String -&gt; String -&gt; String -&gt; Attribute</code>
+</pre>
+<h4>empty</h4>
+<pre class="api"><code class="api">empty :: Html</code>
+</pre>
+<h4>parent</h4>
+<pre class="api"><code class="api">parent :: String -&gt; String -&gt; String -&gt; String -&gt; Html -&gt; Html</code>
+</pre>
+<h4>leaf</h4>
+<pre class="api"><code class="api">leaf :: String -&gt; String -&gt; String -&gt; Html</code>
+</pre>
+<h4>toHtml</h4>
+<pre class="api"><code class="api">toHtml :: String -&gt; HtmlM a</code>
+</pre>
+<h4>makeAttr</h4>
+<pre class="api"><code class="api">makeAttr :: String -&gt; String -&gt; Attribute</code>
+</pre>
+<h4>makePar</h4>
+<pre class="api"><code class="api">makePar :: String -&gt; Html -&gt; Html</code>
+</pre>
+<h4>makeLeaf</h4>
+<pre class="api"><code class="api">makeLeaf :: String -&gt; Html</code>
+</pre>
+<h4>($&lt;)</h4>
+<pre class="api"><code class="api">($&lt;) :: (Html -&gt; Html) -&gt; String -&gt; Html</code>
+</pre>
+<a class="anchor" id="util-html-handlebars"></a>
+<hr>
+<h2>Util.HTML.Handlebars</h2>
+<h4>Public function interface</h4>
+<ul>
+   <li>handlebar</li>
+   <li>each</li>
+   <li>($?)</li>
+   <li>renderWithHtml</li>
+</ul>
+<hr>
+<h4>handlebar</h4>
+<pre class="api"><code class="api">handlebar :: String -&gt; Html</code>
+</pre>
+<h4>each</h4>
+<pre class="api"><code class="api">each :: String -&gt; Html -&gt; Html</code>
+</pre>
+<h4>($?)</h4>
+<pre class="api"><code class="api">($?) :: (Html -&gt; Html) -&gt; String -&gt; Html</code>
+</pre>
+<h4>renderWithHtml</h4>
+<pre class="api"><code class="api">renderWithHtml :: (ToJSON a) =&gt; Html -&gt; a -&gt; IO String</code>
+</pre>
+<a class="anchor" id="util-handlebars"></a>
+<hr>
+<h2>Util.Handlebars</h2>
+<h4>Public function interface</h4>
+<ul>
+   <li>compile</li>
+   <li>render</li>
+</ul>
+<hr>
+<h4>compile</h4>
+<pre class="api"><code class="api">compile :: forall a. String -&gt; IO (Ptr a -&gt; IO PackedString)</code>
+</pre>
+<h4>render</h4>
+<pre class="api"><code class="api">render :: (ToJSON a) =&gt; (Ptr a -&gt; IO PackedString) -&gt; a -&gt; IO String
+render' :: (ToJSON a) =&gt; (Ptr a -&gt; IO PackedString) -&gt; a -&gt; IO PackedString</code>
+</pre>
+<h4>Collection</h4>
+<pre class="api"><code class="api">newtype Collection a = Collection [a]</code>
+</pre>
+<a class="anchor" id="util-json"></a>
+<hr>
+<h2>Util.JSON</h2>
+<h4>Public function interface</h4>
+<ul>
+   <li>json</li>
+   <li>mapFrom</li>
+   <li>(.!)</li>
+   <li>mapTo</li>
+   <li>obj</li>
+   <li>(|=)</li>
+   <li>stringify</li>
+   <li>valueToStr</li>
+   <li>toStr</li>
+   <li>fromStr</li>
+</ul>
+<hr>
+<pre class="api"><code class="api">newtype Object = Obj [(String, Value)]</code>
+</pre>
+<p>A JSON object is implemented as an association list.</p>
+<pre class="api"><code class="api">class FromJSON a where fromJSON :: Value -&gt; Maybe a</code>
+</pre>
+<pre class="api"><code class="api">class ToJSON a where toJSON :: a -&gt; Value</code>
+</pre>
+<h4>json</h4>
+<pre class="api"><code class="api">json :: Parser Value</code>
+</pre>
+<h4>mapFrom</h4>
+<pre class="api"><code class="api">mapFrom :: (FromJSON a) =&gt; Value -&gt; Maybe [a]</code>
+</pre>
+<h4>(.!)</h4>
+<pre class="api"><code class="api">(.!) :: (FromJSON a) =&gt; Object -&gt; String -&gt; Maybe a</code>
+</pre>
+<h4>mapTo</h4>
+<pre class="api"><code class="api">mapTo :: (ToJSON a) =&gt; [a] -&gt; Value</code>
+</pre>
+<h4>obj</h4>
+<pre class="api"><code class="api">obj :: [(String, Value)] -&gt; Value</code>
+</pre>
+<h4>(|=)</h4>
+<pre class="api"><code class="api">(|=) :: ToJSON a =&gt; String -&gt; a -&gt; (String, Value)</code>
+</pre>
+<h4>stringify</h4>
+<pre class="api"><code class="api">stringify :: Object -&gt; String</code>
+</pre>
+<h4>valueToStr</h4>
+<pre class="api"><code class="api">valueToStr :: Value -&gt; String</code>
+</pre>
+<h4>toStr</h4>
+<pre class="api"><code class="api">toStr :: (ToJSON a) =&gt; a -&gt; String</code>
+</pre>
+<h4>fromStr</h4>
+<pre class="api"><code class="api"> fromStr :: (FromJSON a) =&gt; String -&gt; Maybe a</code>
+</pre>
+<a class="anchor" id="util-router"></a>
+<hr>
+<h2>Util.Router</h2>
+<p>Parser-monad for hashtag navigation</p>
+<h4>Public function interface</h4>
+<ul>
+   <li>str</li>
+   <li>num</li>
+   <li>atom</li>
+   <li>components</li>
+   <li>locationHash</li>
+   <li>setMap</li>
+</ul>
+<hr>
+<h4>str</h4>
+<pre class="api"><code class="api">str :: RouteM String</code>
+</pre>
+<p>Read a string segment.</p>
+<h4>num</h4>
+<pre class="api"><code class="api">num :: RouteM Int</code>
+</pre>
+<p>Read a numeric segment.</p>
+<h4>atom</h4>
+<pre class="api"><code class="api">atom :: String -&gt; RouteM ()</code>
+</pre>
+<p>Match a string literal.</p>
+<h4>components</h4>
+<pre class="api"><code class="api">components :: String -&gt; [String]</code>
+</pre>
+<p>Split a uri string into its path components.</p>
+<h4>locationHash</h4>
+<pre class="api"><code class="api">locationHash :: IO [String]</code>
+</pre>
+<p>Return a list of the slash-separated segments of the anchor
+portion of the current URL.</p>
+<h4>setMap</h4>
+<pre class="api"><code class="api">setMap :: [Route] -&gt; IO ()</code>
+</pre>
+<p>Set routing rules.</p>
+<a class="anchor" id="util-storage"></a>
+<hr>
+<h2>Util.Storage</h2>
+<p>Key-value based local storage interface</p>
+<h4>Public function interface</h4>
+<ul>
+   <li>set</li>
+   <li>get</li>
+   <li>deleteKey</li>
+   <li>index</li>
+   <li>flush</li>
+   <li>setTTL</li>
+   <li>getTTL</li>
+   <li>storageSize</li>
+   <li>currentBackend</li>
+   <li>reInit</li>
+   <li>storageAvailable</li>
+</ul>
+<hr>
+<h4>set</h4>
+<pre class="api"><code class="api">set :: (ToJSON a) =&gt; String -&gt; a -&gt; IO ()
+set' :: (ToJSON a) =&gt; PackedString -&gt; a -&gt; IO ()</code>
+</pre>
+<p>Saves a value to local storage.</p>
+<h4>get</h4>
+<pre class="api"><code class="api">get :: (FromJSON a) =&gt; String -&gt; IO (Maybe a)
+get' :: (FromJSON a) =&gt; PackedString -&gt; IO (Maybe a)</code>
+</pre>
+<p>Retrieves the stored value matching the given key, if one
+exists.</p>
+<h4>deleteKey</h4>
+<pre class="api"><code class="api">deleteKey :: String -&gt; IO ()
+deleteKey' :: PackedString -&gt; IO ()</code>
+</pre>
+<p>Removes a key from the storage.</p>
+<h4>index</h4>
+<pre class="api"><code class="api">index :: IO [String]
+index' :: IO [PackedString]</code>
+</pre>
+<p>Returns all keys currently in use as a list.</p>
+<h4>flush</h4>
+<pre class="api"><code class="api">flush :: IO ()</code>
+</pre>
+<p>Clears the cache.</p>
+<h4>setTTL</h4>
+<pre class="api"><code class="api">setTTL :: String -&gt; Int -&gt; IO ()
+setTTL' :: PackedString -&gt; Int -&gt; IO ()</code>
+</pre>
+<p>Sets a TTL (in milliseconds) for an existing key. Use 0 or
+negative value to clear TTL.</p>
+<h4>getTTL</h4>
+<pre class="api"><code class="api">getTTL :: String -&gt; IO Int
+getTTL' :: PackedString -&gt; IO Int</code>
+</pre>
+<p>Gets remaining TTL (in milliseconds) for a key or 0 if not TTL
+has been set.</p>
+<h4>storageSize</h4>
+<pre class="api"><code class="api">storageSize :: IO Int</code>
+</pre>
+<p>Returns the size of the stored data in bytes.</p>
+<h4>currentBackend</h4>
+<pre class="api"><code class="api">currentBackend :: IO String</code>
+</pre>
+<p>Returns the storage engine currently in use or
+<code class="api">"false"</code> if none.</p>
+<h4>reInit</h4>
+<pre class="api"><code class="api">reInit :: IO ()</code>
+</pre>
+<p>Reloads the data from browser storage.</p>
+<h4>storageAvailable</h4>
+<pre class="api"><code class="api">storageAvailable :: IO Bool</code>
+</pre>
+<p>Returns <code class="api">True</code> if storage is available.</p>
+<a class="anchor" id="util-string"></a>
+<hr>
+<h2>Util.String</h2>
+<h4>Public function interface</h4>
+<ul>
+   <li>pack</li>
+   <li>unpack</li>
+</ul>
+<hr>
+<h4>pack</h4>
+<pre class="api"><code class="api">pack :: String -&gt; PackedString</code>
+</pre>
+<p>Convert a Haskell <code class="api">String</code> to JavaScript string
+format.</p>
+<h4>unpack</h4>
+<pre class="api"><code class="api">unpack :: PackedString -&gt; String</code>
+</pre>
+<p>Convert a JavaScript string to Haskell <code class="api">String</code>
+format.</p>
+<hr>
+<p>&copy; 2014 Johannes Hild&eacute;n. Code licensed under <a href="https://github.com/johanneshilden/liquid-epsilon/blob/master/LICENSE">BSD</a>. 
+
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="js/jquery.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/docs.min.js"></script>
+  </body>
+</html>

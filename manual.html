@@ -1,0 +1,1841 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="../../assets/ico/favicon.ico">
+
+    <style type="text/css">
+        .anchor { display: block; position: relative; top: -70px; visibility: hidden; }
+        h2 code, h3 code, h4 code { color: #333; }
+        h4 { margin-top: 20px !important; }
+        blockquote.intro { border:none; padding-left:0; margin-bottom:0; }
+    </style>
+
+    <title>Liquid Epsilon Manual</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="css/dashboard.css" rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy this line! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">Liquid Epsilon</a>
+          <ul class="nav navbar-nav">
+            <li><a href="/">Home</a></li>
+            <li class="active"><a href="#">Manual</a></li>
+            <li><a href="documentation.html">Documentation</a></li>
+            <li><a href="examples.html">Examples</a></li>
+            <li><a href="https://github.com/johanneshilden/liquid-epsilon">Download</a></li>
+         </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+          <ul class="nav nav-sidebar">
+            <li><a href="#overview">Overview</a></li>
+            <li><a href="#hello-world">Hello world</a></li>
+            <li><a href="#dom">DOM</a></li>
+            <li><a href="#string">String</a></li>
+            <li><a href="#html">HTML</a></li>
+            <li><a href="#json">JSON</a></li>
+            <li><a href="#handlebars">Handlebars</a></li>
+            <li><a href="#handlebars-html">Handlebars HTML</a></li>
+            <li><a href="#frp">FRP</a></li>
+            <li><a href="#storage">Storage</a></li>
+            <li><a href="#router">Router</a></li>
+            <li><a href="#common-errors">Common errors</a></li>
+          </ul>
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+          <h1 class="page-header">Manual</h2>
+
+<blockquote><p>Liquid Epsilon is a smorgosbord of modules to assist in building
+single-page, client-side web and mobile applications, using Haskell
+and the UHC compiler.</p></blockquote>
+<a class="anchor" id="overview"></a>
+<h2>Overview</h2>
+<p>This project is based on the <a href=
+"http://www.cs.uu.nl/wiki/UHC">Utrecht Haskell Compiler</a>'s
+JavaScript backend. UHC-JS compiles a Haskell program to JavaScript
+and automatically generates the boilerplate HTML and runtime
+libraries required to execute the program in a web browser. UHC-JS
+also provides a foreign function interface (FFI) which facilitates
+low-level interaction with JavaScript code and the underlying
+browser environment. The backend was originally implemented by Atze
+Dijkstra and released with UHC version 1.1. The UHC compiler
+supports almost all Haskell98 features, plus experimental
+extensions and runs under Mac OS X, Windows (cygwin), and various
+Unix flavors.</p>
+<h3>Installation</h3>
+<ol>
+   <li>
+      <p>For instructions on how to install UHC-JS, see <a href=
+      "http://uu-computerscience.github.io/uhc-js/documentation.html#installation_of_uhc">
+      this page</a>.</p>
+   </li>
+   <li>
+      <p>Once UHC is installed, clone the repository to a suitable
+      location. Make sure the <code>Util</code> namespace is
+      available to the compiler. (Simple solution: Run
+      <code>uhc</code> from the folder directly above
+      <code>Util</code>)</p>
+   </li>
+</ol>
+<h4>Other sources of information</h4>
+<ul>
+   <li>The <a href=
+   "http://uu-computerscience.github.io/uhc-js/">UHC-JS
+   homepage</a></li>
+   <li><a href=
+   "http://www.cs.uu.nl/wiki/Ehc/Documentation">Documentation for
+   UHC</a></li>
+</ul>
+<p>I should also mention that the resource which really helped me
+getting started was a research paper named <a href=
+"http://www.norm2782.com/improving-uhc-js-report.pdf">&ldquo;Improving
+the UHC JavaScript backend&rdquo;</a>, by Jurri&euml;n Stutterheim.
+A report that has made several enhancements to the UHC-JS
+libraries.</p>
+<p>From the paper:</p>
+<blockquote>
+   <small>The primary contribution of this report is a whole new way of
+   dealing with JavaScript objects from the Haskell world. To
+   support this, we implement several new primitive functions and
+   expand the foreign function interface expression language. In
+   addition, we implement foreign wrappers and dynamic imports.</small>
+   </blockquote>
+<h3>Objectives</h3>
+<p>The goal of the project is to show the feasibility of developing
+client-side web applications using Haskell, and provide practical
+tools for doing so. Still, it leaves a lot to be desired in terms
+of performance and scalability.</p>
+<h4>Why not simply use the original libraries?</h4>
+<a class="anchor" id="reinvent-the-wheel" style="top: -100px;"></a>
+<p>This project reinvents a lot of wheels; in particular the Aeson
+and Blaze libraries. Why not use them instead?</p>
+<p><strong>Answer:</strong> That would be great! However, due to
+tricky dependencies (<code>Data.ByteString</code> etc.), getting
+these to compile with UHC and the <code>-tjs</code> option is not
+always straightforward.</p>
+<ul>
+   <li>blaze-html is &copy; Jasper Van der Jeugt, Simon Meier</li>
+   <li>Aeson is &copy; 2011, 2012, 2013 Bryan O'Sullivan &copy;
+   2011 MailRank, Inc</li>
+</ul>
+<hr>
+<a class="anchor" id="hello-world"></a>
+<h2>Hello world</h2>
+<pre>
+<code>module Main where
+
+import Util.Base
+
+main :: IO ()
+main = do
+    wrap $ do
+        print "Hello world!"
+    &gt;&gt;= onReady </code>
+</pre>
+<p>To compile a program, a single command is used. If your source
+file is named <code>Main.hs</code>, simply type:</p>
+<pre>
+<code>uhc Main.hs -tjs </code>
+</pre>
+<p>This generates a <code>main.html</code> file. Open this document
+in your browser and you should see a blank page with the text
+&ldquo;Hello world!&rdquo;. (You don't say!)</p>
+<h4>A closer look at Hello world</h4>
+<p>The <code>wrap</code> &hellip; <code>&gt;&gt;= onReady</code>
+block serves a similar purpose to the <code>$(function(){ ...
+});</code> construct in jQuery. That is, the inner
+<code>do</code>-block is guaranteed to run strictly after the
+<code>document.DOMContentLoaded</code> event has occurred.</p>
+<blockquote>
+   <small><strong>Note:</strong> Ideally, waiting for the document to
+   be &ldquo;ready&rdquo;, should be implemented in the runtime
+   rather than explicitly in application code.</small>
+</blockquote>
+<h4>Wrapping functions for JavaScript import</h4>
+<p>The <code>wrap</code> function creates a <code>FunPtr (IO
+a)</code> function pointer from an <code>IO a</code> action. This
+is needed by <code>onReady</code> to allow interaction with the
+JavaScript environment.</p>
+<pre>
+<code>wrap :: IO a -&gt; IO (FunPtr (IO a)) </code>
+</pre>
+<p>This is further explained in Jurri&euml;n Stutterheim's
+paper:</p>
+<blockquote>
+   <small>A wrapper import allows a Haskell function to be wrapped as a
+   foreign function at runtime. The Haskell 2010 report states that
+   a wrapper must be of the form <code>ft -&gt; IO (FunPtr
+   ft)</code>. This allows a Haskell function to be used as
+   callback from a JavaScript function.</small>
+</blockquote>
+<p>The type of <code>onReady</code> is:</p>
+<pre>
+<code>onReady :: FunPtr (IO a) -&gt; IO () </code>
+</pre>
+<p>Here is another way of writing the above &ldquo;Hello
+world&rdquo; example, although I prefer the former version.</p>
+<pre>
+<code>myMain :: IO ()
+myMain = print "Hello world!"
+
+main :: IO ()
+main = do
+    f &lt;- wrap myMain
+    onReady f </code>
+</pre>
+<h3>Important &ldquo;gotcha&rdquo; about external libraries</h3>
+<p>Some modules (in particular <code>Util.Handlebars</code> and
+<code>Util.Storage</code>) require additional JavaScript plugins to
+work. <code>Util.Base</code> exports <code>addScript</code> and
+<code>addScripts</code>, used to dynamically add such external
+scripts to your document. These functions create a new
+<code>&lt;script&gt;</code> element at run-time, assign it the
+appropriate attributes, and append it to the document.</p>
+<pre>
+<code>main :: IO ()
+main = do
+    addScript "../../js/handlebars.js"
+    wrap $ do
+        ...
+    &gt;&gt;= onLoad  -- We must use onLoad instead of onReady to wait for
+                -- the added scripts to load. </code>
+</pre>
+<p>Note the use of <code>onLoad</code> instead of
+<code>onReady</code> in the above example.</p>
+<p><code>addScripts</code> accepts a list of files:</p>
+<pre>
+<code>addScripts [ "../../js/handlebars.js"
+           , "../../js/jstorage.js"
+           ] </code>
+</pre>
+<p>Needless to say, you should verify that the plugins are present
+and readable in your file system.</p>
+<hr>
+<a class="anchor" id="dom"></a>
+<h2>DOM</h2>
+<pre>
+<code>import Util.DOM </code>
+</pre>
+<blockquote class="intro">Think of this module as a thin wrapper for the more common
+JavaScript DOM access functions, such as
+<code>document.getElementById()</code> and
+<code>document.write()</code>.</blockquote>
+<p>The <code>Element</code> type is used throughout this and other
+modules to represent a DOM element. <code>Element</code> is an
+opaque pointer that cannot be modified or otherwise dereferenced
+outside of JavaScript code.</p>
+<pre>
+<code>data ElementPtr
+type Element = Ptr ElementPtr </code>
+</pre>
+<p>Most of the functions exported here should be reasonably
+self-explanatory. Otherwise, the following examples will give you
+some idea of how the API works. Although this approach to DOM
+manipulation lacks the declarative expressiveness one rightfully
+might expect from a Haskell library, these &ldquo;low-level&rdquo;
+functions are helpful for raw DOM access when writing library
+code.</p>
+<p>Here is a simple function that creates a
+<code>&lt;button&gt;</code> element:</p>
+<pre>
+<code>createButton :: String -&gt; IO Element
+createButton name = do
+    e &lt;- createElement "button"
+    t &lt;- createTextNode name
+    t ~&gt; e
+    return e </code>
+</pre>
+<p>The <code>~&gt;</code> operator is an infix version of
+<code>appendChild</code> with the arguments flipped.</p>
+<pre>
+<code>-- | Add an element after the last child node of the specified element.
+appendChild :: Element   -- ^ Parent node
+            -&gt; Element   -- ^ The child element 
+            -&gt; IO () </code>
+</pre>
+<p>Now to add the button to our document:</p>
+<pre>
+<code>-- Create a standard button and append it to the document's body element.
+addHelloButton :: IO Element
+addHelloButton = do
+    e &lt;- createButton "Hello!"
+    body &lt;- documentBody
+    e ~&gt; body 
+    return e </code>
+</pre>
+<p><code>getElementById</code> returns a <code>IO (Maybe
+Element)</code> to properly handle cases where no element is
+found.</p>
+<pre>
+<code>getElementById :: String -&gt; IO (Maybe Element) </code>
+</pre>
+<h4>A more elaborate example</h4>
+<p>This example also uses <code>setInnerHtml</code>,
+<code>onClick</code> and some other crazy stuff.</p>
+<pre>
+<code>module Main where
+
+import Util.Base
+import Util.DOM
+import Util.String     ( pack )
+
+sayHello :: IO ()
+sayHello = do
+    body &lt;- documentBody
+    e &lt;- createTextNode "Hello smorgosbord!"
+    p &lt;- createElement "p"
+    e ~&gt; p
+    p ~&gt; body 
+
+createButton :: String -&gt; IO Element
+createButton name = do
+    e &lt;- createElement "button"
+    t &lt;- createTextNode name
+    t ~&gt; e
+    return e
+
+-- Create a standard button and append it to 
+-- the document's body element.
+addHelloButton :: IO Element
+addHelloButton = do
+    e &lt;- createButton "Hello!"
+    body &lt;- documentBody
+    appendChild body e
+    return e
+
+addBorder :: IO ()
+addBorder = do
+    el &lt;- getElementById "my-div"
+    -- getElementById returns a Maybe Element
+    case el of
+        Nothing -&gt; return ()
+        Just e  -&gt; do
+            setAttribute e "style" 
+                           "border: 2px solid red"
+
+main :: IO ()
+main = do
+    wrap $ do
+        e &lt;- addHelloButton
+        e `onClick` sayHello
+        -- Create a simple div element
+        div &lt;- createElement "div"
+        setInnerHtml div "This is a div"
+        setAttribute div "id" "my-div"
+        body &lt;- documentBody
+        div ~&gt; body   -- i.e., appendChild body div
+        addBorder
+
+    &gt;&gt;= onReady </code>
+</pre>
+<hr>
+<a class="anchor" id="string"></a>
+<h2>String</h2>
+<pre>
+<code>import Util.String </code>
+</pre>
+<blockquote class="intro"><code>Util.String</code> exports the <code>pack</code> and
+<code>unpack</code> functions, for conversion between Haskell
+<code>String</code>s and plain JavaScript string format.</blockquote> 
+
+<p>An opaque <code>PackedString</code> pointer type is used throughout the
+lower-level JavaScript API, and expected by most FFI function
+calls. Use <code>pack</code> to convert a Haskell
+<code>String</code> to a <code>PackedString</code> and
+<code>unpack</code> for the other way around.</p>
+<pre>
+<code>pack :: String -&gt; PackedString
+unpack :: PackedString -&gt; String </code>
+</pre>
+<p>Keep in mind that interchanging between one string
+representation form and the other is an expensive operation. It is
+also well-known that relying on Haskell's default lazy list
+implementation for text data, even when compiling to native code,
+is inefficient.</p>
+<p>Many functions that accept <code>String</code> arguments also
+have alternative <code>PackedString</code> versions. By convention,
+their names end with a <code>'</code> character:</p>
+<pre>
+<code>-- | Create an element with the specified name.
+createElement :: String -&gt; IO Element
+createElement' :: PackedString -&gt; IO Element </code>
+</pre>
+<p>Prefer processing text in packed form whenever this is
+possible.</p>
+<hr>
+<a class="anchor" id="html"></a>
+<h2>HTML</h2>
+<pre>
+<code>import Util.HTML
+import Util.HTML.Attributes
+import Util.HTML.Elements </code>
+</pre>
+<blockquote class="intro">Modeled after the <a href="http://jaspervdj.be/blaze/">Blaze
+library</a> (without being as blazingly fast unfortunately), the
+<code>Util.HTML</code> module makes it possible to embed HTML
+templates in Haskell code.</blockquote>
+<p><strong>Why not simply use the original libraries?</strong>
+Please refer the <a href="#reinvent-the-wheel">top of this document</a>.</p>
+<p>Here is an example to show the rationale behind the HTML
+combinator approach:</p>
+<pre>
+<code>myHtml :: Html
+myHtml = body $ do
+             p $ 
+                 a ! href "#" $&lt; "This is a link"
+             p $
+                 span $&lt; "Calcudoku!" </code>
+</pre>
+<p>The above snippet translates into the following block of
+HTML:</p>
+<pre>
+<code>&lt;body&gt;
+    &lt;p&gt;
+        &lt;a href="#"&gt;This is a link&lt;/a&gt;
+    &lt;/p&gt;
+    &lt;p&gt;
+        &lt;span&gt;Calcudoku!&lt;/span&gt;
+    &lt;/p&gt;
+&lt;/body&gt; </code>
+</pre>
+<p><code>Util.HTML</code> comes with a set of standard HTML
+elements and attributes, found under
+<code>Util.HTML.Elements</code> and
+<code>Util.HTML.Attributes</code> respectively. Typically, you
+import these modules qualified to avoid namespace issues. The
+documentation for Blaze recommends importing everything twice
+&ndash; once with an alias and once without. We will follow the
+same convention here.</p>
+<pre>
+<code>import Util.HTML.Attributes
+import Util.HTML.Elements
+import qualified Util.HTML.Attributes   as A
+import qualified Util.HTML.Elements     as H </code>
+</pre>
+<p>Now we can start building some HTML. Here is a small example,
+adapted from the Blaze documentation:</p>
+<pre>
+<code>module Main where
+
+import Control.Monad             ( forM_ )
+import Util.Base
+import Util.DOM                  ( documentWrite )
+import Util.HTML
+import Util.HTML.Attributes
+import Util.HTML.Elements
+
+import qualified Util.HTML.Attributes   as A
+import qualified Util.HTML.Elements     as H
+
+numbers :: Int -&gt; Html
+numbers n = 
+    docTypeHtml $ do
+        H.head $ H.title $&lt; "Natural numbers"
+        body $ do
+            p $&lt; "A list of natural numbers:"
+            ul $ forM_ [1 .. n] $ li . toHtml . show
+
+main :: IO ()
+main = do
+    wrap $ do
+        documentWrite $ renderHtml $ numbers 42
+
+    &gt;&gt;= onReady </code>
+</pre>
+<p><code>Html</code> is a type synonym for <code>HtmlM ()</code>.
+The monadic behavior of <code>HtmlM</code> makes it straightforward
+to line up your elements inside the <code>do</code>-blocks, in the
+familiar, sequential manner.</p>
+<h4>Rendering</h4>
+<p>To eventually use the HTML in our document,
+<code>renderHtml</code> converts a <code>Html</code> value to an
+ordinary <code>String</code>, with special characters converted to
+their correct HTML entities.</p>
+<pre>
+<code>renderHtml :: Html -&gt; String </code>
+</pre>
+<h4>Leafs and parent nodes</h4>
+<p>There are two types of elements, <em>leafs</em> and
+<em>parents</em>. Leafs are good to go on their own:</p>
+<pre>
+<code>br :: Html </code>
+</pre>
+<p>A parent (<code>&lt;div&gt;</code>, <code>&lt;p&gt;</code>,
+<code>&lt;body&gt;</code>, etc.) takes another <code>Html</code>
+child node and encapsulates it:</p>
+<pre>
+<code>div :: Html -&gt; Html </code>
+</pre>
+<p>The <code>$&lt;</code> operator is shorthand for the
+<code>toHtml</code> function. It creates a simple text node.</p>
+<pre>
+<code>($&lt;) :: (Html -&gt; Html) -&gt; String -&gt; Html
+($&lt;) a = a . toHtml </code>
+</pre>
+<p>That is, instead of <code>H.title $ toHtml "foo"</code>; we can
+write <code>H.title $&lt; "foo"</code>.</p>
+<h4>Attributes</h4>
+<p>Attributes can be added to both leafs and parents using the
+<code>!</code> infix operator:</p>
+<pre>
+<code>a ! href "http://www.google.com" $&lt; "A link" </code>
+</pre>
+<p>Naturally, you can attach as many attributes as you like.</p>
+<pre>
+<code>img ! src "foo.png" ! alt "A foo image" </code>
+</pre>
+<p>Examples, examples, examples! Here are some more examples.</p>
+<pre>
+<code>markup :: Html
+markup = do
+    p $ do 
+        a ! href "#" $&lt; "A link"
+    p $ do
+        b $&lt; "Some bold text"
+    p $ do
+        ul $ do
+            li $&lt; "item"
+            li $&lt; "item"
+            li $&lt; "item"
+    p $ do
+        H.div ! style "border: 2px solid orange" 
+            $&lt; "Have a nice div..." </code>
+</pre>
+<hr>
+<a class="anchor" id="json"></a>
+<h2>JSON</h2>
+<pre>
+<code>import Util.JSON </code>
+</pre>
+<blockquote class="intro">Mimicking the <a href=
+"http://hackage.haskell.org/package/aeson/docs/Data-Aeson.html">Aeson</a>
+library, the JSON module allows nested parsing and serialization
+for easy, type-safe translation of Haskell data into native
+JavaScript objects.</blockquote>
+<p><strong>Why not simply use the original libraries?</strong>
+Please refer the <a href="#reinvent-the-wheel">top of this document</a>.</p>
+<p>Just like Aeson, the <code>Util.JSON</code> module defines two
+type classes; <code>FromJSON</code> and <code>ToJSON</code>.
+Instantiate these to make your data types available to the various
+APIs. Instances for many of the primitive types are already defined
+in <code>Util.JSON</code>.</p>
+<h4>Using <code>toStr</code> and <code>fromStr</code></h4>
+<p><code>toStr</code> translates any <code>ToJSON</code> data to a
+<code>String</code> value.</p>
+<pre>
+<code>toStr :: (ToJSON a) =&gt; a -&gt; String </code>
+</pre>
+<p>For instance:</p>
+<pre>
+<code>example :: String
+example = toStr [1,2,3,4]    -- "[1,2,3,4]" </code>
+</pre>
+<p><code>fromStr</code> does the opposite:</p>
+<pre>
+<code>fromStr :: (FromJSON a) =&gt; String -&gt; Maybe a </code>
+</pre>
+<p>Note that <code>fromStr</code> returns a <code>Maybe a</code>,
+since parsing may fail.</p>
+<pre>
+<code>example :: Maybe [Int]
+example = fromStr "[1,2,3,4]" </code>
+</pre>
+<h4>Behind the scenes</h4>
+<p>The key behind safe translation between JSON and Haskell data is
+the intermediate <code>Value</code> type, used internally by the
+<code>Parser</code> monad.</p>
+<pre>
+<code>-- | JSON value represented as a Haskell type.
+data Value = Object !Object
+           | Array  ![Value]
+           | Str    !String
+           | Number !Double
+           | Bool   !Bool
+           | Null </code>
+</pre>
+<h3>Rolling your own instances</h3>
+<h4>From JSON</h4>
+<p>Creating a <code>FromJSON</code> instance is, again, very
+similar to how Aeson works. The type class is defined as:</p>
+<pre>
+<code>class FromJSON a where
+    fromJSON :: Value -&gt; Maybe a </code>
+</pre>
+<p>For this example, let us consider a data type&hellip;</p>
+<pre>
+<code>data Person = Person
+    { name       :: String
+    , age        :: Int
+    , occupation :: Occupation
+    } </code>
+</pre>
+<p>A compatible JSON object could be constructed as:</p>
+<pre>
+<code>{ 
+  "name": "Bob",
+  "age": 32,
+  "occupation": "manager"
+} </code>
+</pre>
+<p>We use applicative style to lift the <code>Person</code>
+constructor to <code>Maybe</code>. Recall that the type signature
+for <code>fromJSON</code> is <code>Value -&gt; Maybe a</code>.</p>
+<pre>
+<code>instance FromJSON Person where
+    fromJSON (Object v) =
+        Person &lt;$&gt; v .! "name"
+               &lt;*&gt; v .! "age"
+               &lt;*&gt; v .! "occupation"
+    fromJSON _ = Nothing </code>
+</pre>
+<p>The <code>.!</code> operator looks up each key in the
+<code>Object</code> association list and then calls
+<code>fromJSON</code> recursively if a value is found which matches
+the key.</p>
+<pre>
+<code>(.!) :: (FromJSON a) =&gt; Object -&gt; String -&gt; Maybe a </code>
+</pre>
+<p>The <code>occupation</code> field holds another custom data
+type.</p>
+<pre>
+<code>data Occupation = Chef | Pilot | Manager </code>
+</pre>
+<p>For simple algebraic types such as this, we use pattern
+matching.</p>
+<pre>
+<code>instance FromJSON Occupation where
+    fromJSON (Str "chef")    = Just Chef
+    fromJSON (Str "pilot")   = Just Pilot
+    fromJSON (Str "manager") = Just Manager
+    fromJSON _ = Nothing </code>
+</pre>
+<h4>To JSON</h4>
+<p>Here is how the <code>ToJSON</code> type class is defined:</p>
+<pre>
+<code>class ToJSON a where
+    toJSON :: a -&gt; Value </code>
+</pre>
+<p>We use the <code>obj</code> function and the <code>|=</code>
+operator to build up a <code>Value</code> from our
+<code>Person</code> record:</p>
+<pre>
+<code>instance ToJSON Person where
+    toJSON (Person n a o) =
+        obj [ "name"       |= n
+            , "age"        |= a
+            , "occupation" |= o 
+            ] </code>
+</pre>
+<p><code>|=</code> is defined in <code>Util.JSON</code>:</p>
+<pre>
+<code>(|=) :: ToJSON a =&gt; String -&gt; a -&gt; (String, Value) </code>
+</pre>
+<p>For our <code>Occupation</code> type, we simply translate each
+constructor to a string literal, since JSON doesn't have an
+enumerated type.</p>
+<pre>
+<code>instance ToJSON Occupation where
+    toJSON Chef    = Str "chef"
+    toJSON Pilot   = Str "pilot"
+    toJSON Manager = Str "manager" </code>
+</pre>
+<p>Finally, we use the <code>mapFrom</code> and <code>mapTo</code>
+helpers to automatically extend our instances to lists:</p>
+<pre>
+<code>instance FromJSON [Person] where
+    fromJSON = mapFrom
+instance ToJSON [Person] where
+    toJSON = mapTo </code>
+</pre>
+<p>Let's run some tests on our new instances.</p>
+<pre>
+<code>main :: IO ()
+main = do
+    wrap $ do
+        case fromStr "[1,2,3]" :: Maybe [Int] of
+          Nothing -&gt; putStrLn "--"
+          Just a  -&gt; putStrLn $ show a ++ "&lt;br&gt;&lt;br&gt;"
+
+        case fromStr "[true]" :: Maybe [Bool] of
+          Nothing -&gt; putStrLn "--"
+          Just b  -&gt; putStrLn $ show b ++ "&lt;br&gt;&lt;br&gt;"
+
+        case fromStr "{\"name\":\"Mr. Phelps\",\"age\":55,\"occupation\":\"manager\"}" :: Maybe Person of
+          Nothing -&gt; putStrLn "--"
+          Just c  -&gt; putStrLn $ show (name c) ++ "&lt;br&gt;&lt;br&gt;"
+
+        case fromStr "[1,3,4]" :: Maybe Person of
+          Nothing -&gt; putStrLn "Not a valid Person object.&lt;br&gt;&lt;br&gt;"
+          Just d  -&gt; putStrLn $ show (name d) ++ "&lt;br&gt;&lt;br&gt;"
+
+        let s = toStr $ Person { name       = "Mr. Phelps"
+                               , age        = 55
+                               , occupation = Manager
+                               }
+        putStrLn s
+
+    &gt;&gt;= onReady </code>
+</pre>
+<p>This should output:</p>
+<pre>
+<code>[1,2,3]
+[True]
+"Mr. Phelps"
+Not a valid Person object.
+{"name":"Mr. Phelps","age":55,"occupation":"manager"} </code>
+</pre>
+<hr>
+<a class="anchor" id="handlebars"></a>
+<h2>Handlebars</h2>
+<pre>
+<code>import Util.Handlebars </code>
+</pre>
+<blockquote class="intro">The Handlebars module is a wrapper for the JavaScript <a href=
+"http://handlebarsjs.com">library with the same name</a>.</blockquote>
+<p>According to the Handlebars documentation:</p>
+<blockquote>
+   <small>Handlebars provides the power necessary to let you build
+   semantic templates effectively with no frustration.</small>
+</blockquote>
+<p>Handlebars.js is copyright &copy; 2011 Yehuda Katz, licensed
+under the MIT license and can be <a href=
+"http://builds.handlebarsjs.com.s3.amazonaws.com/handlebars-v1.3.0.js">
+downloaded from here</a>.</p>
+<h4>JS dependency</h4>
+<p>To use this module, you need to make sure that the
+<code>handlebars.js</code> plugin is available and included in your
+HTML file. The easiest way to achieve this is by adding a
+<code>&lt;script&gt;</code> tag dynamically to your document with
+the help of the <code>addScript</code> function from
+<code>Util.Base</code>.</p>
+<pre>
+<code>main :: IO ()
+main = do
+    addScript "../../js/handlebars.js"
+    wrap $ do
+        ...
+    &gt;&gt;= onLoad  -- We must use onLoad instead of onReady to wait for
+                -- the added scripts to load. </code>
+</pre>
+<h4>Handlebars expressions</h4>
+<p>Handlebars templates look like regular HTML, with embedded
+expressions &ndash; variable names surrounded by double curly
+brackets. Here is the template we will use in the following
+examples:</p>
+<pre>
+<code>&lt;h1&gt;{{title}}&lt;/h1&gt;
+&lt;p&gt;Author: {{author}}&lt;/p&gt; </code>
+</pre>
+<p>The idea is to replace these placeholders with actual data,
+represented as an ordinary record type in Haskell:</p>
+<pre>
+<code>data Book = Book 
+    { title  :: String
+    , author :: String 
+    }
+
+instance ToJSON Book where
+    toJSON (Book t a) = obj [ "title"  |= t 
+                            , "author" |= a
+                            ] </code>
+</pre>
+<p><code>Util.Handlebars</code> works closely with the JSON module
+to allow safe and seamless translation between JavaScript objects
+and Haskell data.</p>
+<p>Compiling a template yields a template function <code>Ptr a
+-&gt; IO PackedString</code>.</p>
+<pre>
+<code>compile :: forall a. String -&gt; IO (Ptr a -&gt; IO PackedString) </code>
+</pre>
+<p><code>render</code> accepts a function of this type together
+with a <code>ToJSON</code> instance, from which it generates the
+final output.</p>
+<pre>
+<code>render :: (ToJSON a) =&gt; (Ptr a -&gt; IO PackedString) -&gt; a -&gt; IO String </code>
+</pre>
+<p>This is what the flow normally looks like:</p>
+<pre>
+<code>t   &lt;- compile "&lt;p&gt;{{hello}}&lt;/p&gt;"  -- template
+out &lt;- render t $ obj              -- some ToJSON instance
+print out </code>
+</pre>
+<p>Putting all of this together into a runnable program&hellip;</p>
+<pre>
+<code>module Main where
+
+import Util.Base
+import Util.DOM
+import Util.Handlebars
+
+template :: String
+template = "&lt;h1&gt;{{title}}&lt;/h1&gt;&lt;p&gt;Author: &lt;b&gt;{{author}}&lt;/b&gt;&lt;/p&gt;"
+
+data Book = Book 
+    { title  :: String
+    , author :: String }
+
+instance ToJSON Book where
+    toJSON (Book t a) = obj [ "title"  |= t 
+                            , "author" |= a
+                            ]  
+
+main :: IO ()
+main = do
+    addScript "../../js/handlebars.js"
+    wrap $ do
+        t &lt;- compile template
+        out &lt;- render t $ Book "The Adventures of Tom Sawyer" "Mark Twain"
+        documentWrite out
+
+    &gt;&gt;= onLoad  </code>
+</pre>
+<h3>Collections</h3>
+<p>Handlebars provides an <code>#each</code> helper, used to
+iterate over collections of data.</p>
+<pre>
+<code>&lt;ul class="people"&gt;
+  {{#each people}}
+  &lt;li&gt;{{name}}&lt;/li&gt;
+  {{/each}}
+&lt;/ul&gt; </code>
+</pre>
+<p>For this to work, we need to &ldquo;wrap&rdquo; our Haskell list
+in a collection record, and provide a <code>ToJSON</code> instance
+for <code>[Book]</code>. <code>Util.Handlebars</code> defines a
+<code>Collection</code> <code>newtype</code> for this purpose:</p>
+<pre>
+<code>newtype Collection a = Collection [a] </code>
+</pre>
+<p>We may now introduce a simple type synonym for our collection of
+<code>Book</code>s.</p>
+<pre>
+<code>type BookCollection = Collection Book
+
+instance ToJSON [Book] where
+    toJSON = mapTo
+
+instance ToJSON BookCollection where
+    toJSON (Collection b) =
+        obj [ "books" |= b ] </code>
+</pre>
+<p>Here is a complete, runnable program:</p>
+<pre>
+<code>module Main where
+
+import Util.Base
+import Util.DOM
+import Util.Handlebars
+
+template :: String
+template = "&lt;ul&gt;\
+           \{{#each books}}\
+           \&lt;li&gt;Title: &lt;b&gt;{{title}}&lt;/b&gt;&amp;nbsp;\
+           \Author: {{author}}\
+           \{{/each}}\
+           \&lt;/ul&gt;"
+
+data Book = Book 
+    { title  :: String
+    , author :: String }
+
+instance ToJSON Book where
+    toJSON (Book t a) = obj [ "title"  |= t 
+                            , "author" |= a
+                            ]  
+
+type BookCollection = Collection Book
+
+instance ToJSON [Book] where
+    toJSON = mapTo
+
+instance ToJSON BookCollection where
+    toJSON (Collection b) =
+        obj [ "books" |= b ]
+
+main :: IO ()
+main = do
+    addScript "../../js/handlebars.js"
+    wrap $ do
+        t &lt;- compile template
+        out &lt;- render t $ Collection
+            [ Book "A Tale of Two Cities" "Charles Dickens"
+            , Book "War and Peace"        "Leo Tolstoy"          
+            , Book "The Godfather"        "Mario Puzo"
+            , Book "Catch-22"             "Joseph Heller"
+            ]
+        documentWrite out
+
+    &gt;&gt;= onLoad </code>
+</pre>
+<hr>
+<a class="anchor" id="handlebars-html"></a>
+<h2>Handlebars HTML</h2>
+<pre>
+<code>import Util.HTML.Handlebars </code>
+</pre>
+<blockquote class="intro">This module extends the functionality of
+<code>Util.Handlebars</code> to include support for using
+<code>Util.HTML</code> combinators to build templates.</blockquote> 
+<p>Let's adjust our earlier example to see how this works.</p>
+<p>The <code>Book</code> template in our first example could now be
+written as:</p>
+<pre>
+<code>template :: Html
+template = do
+    h1 $&lt; "Book"
+    p $ do
+        H.span $&lt; "Title:"     &gt;&gt; nbsp
+        b      $&lt; "{{title}}"  &gt;&gt; nbsp
+        H.span $&lt; "Author:"    &gt;&gt; nbsp
+        H.span $&lt; "{{author}}" </code>
+</pre>
+<p><code>Util.Handlebars.HTML</code> also defines an
+<code>$?</code> operator for Handlebars expressions, making it
+possible to write <code>b $? "title"</code> instead of <code>b
+$&lt; "{{title}}"</code>. This is, of course, completely
+optional.</p>
+<p>For our collection, we use the <code>each</code> function.</p>
+<pre>
+<code>each :: String -&gt; Html -&gt; Html </code>
+</pre>
+<p>This is how we use <code>each</code>:</p>
+<pre>
+<code>collectionTempl :: Html
+collectionTempl = do
+    h1 $&lt; "List of books"
+    ul $ each "books" $
+        li $ do
+            H.span $&lt; "Title:"     &gt;&gt; nbsp
+            b      $? "title"      &gt;&gt; nbsp
+            H.span $&lt; "Author:"    &gt;&gt; nbsp
+            H.span $? "author" </code>
+</pre>
+<p>To render a template, we now use <code>renderWithHtml</code>,
+defined in <code>Util.HTML.Handlebars</code>.</p>
+<pre>
+<code>renderWithHtml :: (ToJSON a) =&gt; Html -&gt; a -&gt; IO String </code>
+</pre>
+<p>For instance,</p>
+<pre>
+<code>out &lt;- renderWithHtml template $ Book "Harry Potter" "J.K. Rowling"
+documentWrite out </code>
+</pre>
+<p>Finally, here is everything again as a complete, runnable
+program.</p>
+<pre>
+<code>module Main where
+
+import Util.Base
+import Util.DOM
+import Util.HTML
+import Util.HTML.Attributes
+import Util.HTML.Elements
+import Util.HTML.Handlebars
+import Util.Handlebars
+
+import qualified Util.HTML.Attributes   as A
+import qualified Util.HTML.Elements     as H
+
+template :: Html
+template = do
+    h1 $&lt; "Book"
+    p $ do
+        H.span $&lt; "Title:"     &gt;&gt; nbsp
+        b      $? "title"      &gt;&gt; nbsp
+        H.span $&lt; "Author:"    &gt;&gt; nbsp
+        H.span $? "author"
+
+collectionTempl :: Html
+collectionTempl = do
+    h1 $&lt; "List of books"
+    ul $ each "books" $
+        li $ do
+            H.span $&lt; "Title:"     &gt;&gt; nbsp
+            b      $? "title"      &gt;&gt; nbsp
+            H.span $&lt; "Author:"    &gt;&gt; nbsp
+            H.span $? "author"
+
+data Book = Book 
+    { title  :: String
+    , author :: String }
+
+instance ToJSON Book where
+    toJSON (Book t a) = obj [ "title"  |= t 
+                            , "author" |= a
+                            ]  
+
+type BookCollection = Collection Book
+
+instance ToJSON [Book] where
+    toJSON = mapTo
+
+instance ToJSON BookCollection where
+    toJSON (Collection b) =
+        obj [ "books" |= b ]
+
+main :: IO ()
+main = do
+    addScript "../../js/handlebars.js"
+    wrap $ do
+        out &lt;- renderWithHtml template $ 
+            Book "The Adventures of Tom Sawyer" "Mark Twain"
+        out' &lt;- renderWithHtml collectionTempl $ 
+            Collection [ Book "A Tale of Two Cities" "Charles Dickens"
+                       , Book "War and Peace"        "Leo Tolstoy"          
+                       , Book "The Godfather"        "Mario Puzo"
+                       , Book "Catch-22"             "Joseph Heller"
+                       ]
+        documentWrite $ out ++ out'
+
+    &gt;&gt;= onLoad  </code>
+</pre>
+<hr>
+<a class="anchor" id="frp"></a>
+<h2>FRP</h2>
+<pre>
+<code>import Util.FRP </code>
+</pre>
+<blockquote class="intro">Functional reactive programming is, in my opinion, the most
+elegant approach there is to UI programming. Pioneered by <a href=
+"http://conal.net/">Conal Elliott</a>, this highly declarative
+programming style aims to solve to the problem of modeling data
+that varies over time.</blockquote>
+<p>The FRP module is still at an early stage. Influenced in
+particular by Evan Czaplicki's Elm language (<a href=
+"http://elm-lang.org/">elm-lang</a>), it centers around the notion
+of a <em>Signal</em>.</p>
+<h4>The Signal type constructor</h4>
+<p>If we consider a type <code>a</code>, we may think of a value of
+type <code>Signal a</code> as an <code>a</code>-value which exists in 
+a time domain. For instance, <code>Util.FRP</code> provides a signal
+for the vertical position of the window scrollbar:</p>
+<pre>
+<code>-- | Window scroll Y position signal.
+scrollYSignal :: Signal Int </code>
+</pre>
+<p>The beauty of FRP lies in the ability to take any function and
+lift it (<code>Signal</code> is an applicative functor) to one that
+operats on signals, thereby achieving the desired interactive
+behavior of UI elements without the need for callbacks or similar
+artifacts.</p>
+<h4>Hello FRP world</h4>
+<p>Let's start with a non-reactive counterexample:</p>
+<pre>
+<code>module Main where
+
+import Util.Base
+import Util.DOM
+
+main :: IO ()
+main = do
+    wrap $ do
+        body &lt;- documentBody
+        -- Create two input fields:
+        e1 &lt;- createElement "input"
+        e1 ~&gt; body
+        e2 &lt;- createElement "input"
+        e2 ~&gt; body
+        -- Set the 'value' property of the second input.
+        setValue e2 "Hello static world!"
+
+    &gt;&gt;= onReady </code>
+</pre>
+<p>This is pretty standard stuff. We just set the value of the
+second input to &ldquo;Hello static world!&rdquo; and that's it.
+Moving forward, we note that the function&hellip;</p>
+<pre>
+<code>inputValue :: Element -&gt; Signal String </code>
+</pre>
+<p>&hellip; is used to obtain a signal for the value proprety of an
+input field. However, to apply a <code>Signal String</code> to
+<code>setValue</code>, we must first lift <code>setValue e2</code>
+from,</p>
+<p><code>String -&gt; IO ()</code> to <code>Signal String -&gt;
+Signal IO ()</code>.</p>
+<p>Our friend <code>fmap</code> takes care of that:</p>
+<pre>
+<code>fmap $ setValue e2 </code>
+</pre>
+<p>After applying the <code>inputValue</code> signal from the first
+input, we now end up with a <code>Signal IO ()</code> value.</p>
+<p>Similar to the <code>IO</code> monad, we normally don't
+&ldquo;escape&rdquo; out of the <code>Signal</code> functor. The
+exception is <code>attach</code>, which is used to attach a signal
+to our document.</p>
+<pre>
+<code>attach :: Signal (IO a) -&gt; IO () </code>
+</pre>
+<p>Given this, we can now put everything together:</p>
+<pre>
+<code>module Main where
+
+import Util.Base
+import Util.DOM
+import Util.FRP
+
+main :: IO ()
+main = do
+    wrap $ do
+        body &lt;- documentBody
+        -- Create two input fields:
+        e1 &lt;- createElement "input"
+        e1 ~&gt; body
+        e2 &lt;- createElement "input"
+        e2 ~&gt; body
+        attach $ fmap (setValue e2) $ inputValue e1
+
+    &gt;&gt;= onReady </code>
+</pre>
+<p>The second input field will now update automatically whenever
+the first field changes.</p>
+<p>Since <code>Signal</code> is an <code>Applicative</code>, we
+could instead have chosen this option instead of
+<code>fmap</code>:</p>
+<pre>
+<code>attach $ setValue &lt;$&gt; pure e2 
+                  &lt;*&gt; inputValue e1 </code>
+</pre>
+<h3>Creating signals with <code>_bindSignal</code> .</h3>
+<p><code>_bindSignal</code> creates a signal by binding an event to
+some <code>Element</code> property .</p>
+<pre>
+<code>_bindSignal :: String      -- ^ The name of the event, e.g., 'change'
+            -&gt; String      -- ^ Property to read from when the event is triggered.
+            -&gt; Element     -- ^ A HTML DOM element               
+            -&gt; Signal a </code>
+</pre>
+<p><code>_bindSignal</code> is not intended to be used directly in
+client code, hence the underscore character in the name. When
+implementing your own signals you should always qualify the return
+type:</p>
+<pre>
+<code>scrollY :: Element -&gt; Signal Int
+scrollY = _bindSignal "scroll" "scrollY" </code>
+</pre>
+<p>The above creates a signal associated with the
+<code>scroll</code> event and the <code>scrollY</code> property of
+some <code>Element</code>. We will use this to read the scrollbar
+position of the browser window and delegate this value to an input
+field.</p>
+<p>Since <code>setValue</code> accepts a <code>String</code>, we
+need to throw in a <code>show</code> to get a function <code>Int
+-&gt; IO</code>, hence the <code>setValue input . show</code>:</p>
+<pre>
+<code>module Main where
+
+import Util.Base
+import Util.FRP
+import Util.DOM
+
+scrollY :: Element -&gt; Signal Int
+scrollY = _bindSignal "scroll" "scrollY"
+
+main :: IO ()
+main = do
+    wrap $ do
+        input &lt;- _init
+        win &lt;- window
+        attach $ fmap (setValue input . show) $ scrollY win
+
+    &gt;&gt;= onReady
+
+_init :: IO Element
+_init = do
+    body &lt;- documentBody
+    input &lt;- createElement "input"
+    setAttribute input "style" "position:fixed; top:0;"
+    input ~&gt; body
+    div &lt;- createElement "div"
+    setInnerHtml div $ concat $ take 30 $ repeat "&lt;p&gt;Hello&lt;/p&gt;"
+    div ~&gt; body
+    return input </code>
+</pre>
+<h3>The unit signal and <code>_bindUnitSignal</code></h3>
+<p><code>_bindUnitSignal</code> creates a signal of unit type,
+i.e., one which is not associated with a property, but instead
+emits a simple <code>()</code> value.</p>
+<pre>
+<code>_bindUnitSignal :: String      -- ^ The name of the event, e.g., 'click'
+                -&gt; Element     -- ^ A HTML DOM element
+                -&gt; Signal () </code>
+</pre>
+<p>A typical example is a a click event associated with a DOM
+element. <code>Util.FRP</code> defines a function
+<code>clickSignal</code> for this purpose:</p>
+<pre>
+<code>clickSignal :: Element -&gt; Signal ()
+clickSignal = _bindUnitSignal "click" </code>
+</pre>
+<h3>Event forwarding with <code>_bindSignalOn</code></h3>
+<p>Using <code>_bindSignalOn</code> we can bind an event associated
+with one element to a property on some other element.
+<code>_bindSignalOn</code> is very similar to
+<code>_bindSignal</code>, only that it takes an extra argument for
+the element with the property from which to read the value.</p>
+<pre>
+<code>-- | Create a signal by binding an event associated with one element 
+-- to a property on another element.
+_bindSignalOn :: String      -- ^ The name of the event, e.g., 'change'
+              -&gt; String      -- ^ Property to read from when the event is triggered.
+              -&gt; Element     -- ^ The event element 
+              -&gt; Element     -- ^ The property element
+              -&gt; Signal a </code>
+</pre>
+<p>In this example, we will use <code>_bindSignalOn</code> to
+&ndash; again, create a signal associated with the window scrollbar
+position &ndash; but this time, one that only emits when a button
+click event occurs.</p>
+<pre>
+<code>module Main where
+
+import Util.Base
+import Util.DOM
+import Util.FRP
+
+scrollYOnClick :: Element -&gt; IO (Signal Int)
+scrollYOnClick b = window &gt;&gt;= return . _bindSignalOn "click" "scrollY" b 
+
+main :: IO ()
+main = do
+    wrap $ do
+        body &lt;- documentBody
+        win &lt;- window
+
+        input &lt;- createElement "input"
+        setAttribute input "style" "position:fixed; top:0;"
+        input ~&gt; body
+
+        btn &lt;- createElement "button"
+        setAttribute btn "style" "position:fixed; top:30px;"
+        setInnerHtml btn "Bork!"
+        btn ~&gt; body
+
+        div &lt;- createElement "div"
+        setInnerHtml div $ concat $ take 30 $ repeat "&lt;p&gt;Hello&lt;/p&gt;"
+        div ~&gt; body
+
+        signal &lt;- scrollYOnClick btn
+        attach $ fmap (setValue input . show) $ signal
+
+    &gt;&gt;= onReady </code>
+</pre>
+<h3>More examples</h3>
+<h4>Moving a <code>div</code> after mouse cursor</h4>
+<pre>
+<code>module Main where
+
+import Util.Base
+import Util.DOM
+import Util.FRP
+
+setPos :: Element -&gt; (Int, Int) -&gt; IO ()
+setPos e (x, y) = do
+    setStyleProperty e "left" $ show x ++ "px"
+    setStyleProperty e "top"  $ show y ++ "px"
+
+main :: IO ()
+main = do
+    wrap $ do
+        body &lt;- documentBody
+        div &lt;- createElement "div"
+        setAttribute div "style" "border:1px solid red; width:100px; height:50px; position:absolute;"
+        div ~&gt; body
+        attach $ fmap (setPos div) mouseSignal
+
+    &gt;&gt;= onReady </code>
+</pre>
+<h4>Form validation</h4>
+<pre>
+<code>module Main where
+
+import Control.Monad                  ( msum )
+import Util.Base
+import Util.DOM
+import Util.FRP
+
+type Validator = String -&gt; Maybe String
+
+nonEmpty :: String -&gt; Maybe String
+nonEmpty "" = Just "This field must not be empty."
+nonEmpty _  = Nothing
+
+numeric :: String -&gt; Maybe String
+numeric s = case f s of
+              True  -&gt; Nothing
+              False -&gt; Just "Not a valid integer value."
+  where f = and . (map $ flip elem "0123456789") 
+
+validate :: [Validator] -&gt; Element -&gt; String -&gt; IO Element
+validate vs e str = setInnerHtml e $
+    case msum $ vs &lt;*&gt; [str] of
+      Just msg -&gt; msg
+      Nothing  -&gt; ""
+
+main :: IO ()
+main = do
+    wrap $ do
+        body &lt;- documentBody
+        win &lt;- window
+        input &lt;- createElement "input"
+        input ~&gt; body
+        div &lt;- createElement "div"
+        div ~&gt; body
+        let f = validate [nonEmpty, numeric] div in 
+            attach $ fmap f (inputValue input)
+
+    &gt;&gt;= onReady </code>
+</pre>
+<h4>Scroll spy</h4>
+<p>
+Defines a menu whose items are automatically highlighted based on the scrollbar's vertical position.
+</p>
+<blockquote>
+You can also run this example <a href="examples/example1-run.html">directly in the browser</a>.
+</blockquote>
+<pre>
+<code>module Main where
+
+import Data.List                    ( find, sortBy )
+import Data.Maybe                   ( maybeToList )
+import Data.Function                ( on )
+import Util.Base
+import Util.DOM
+import Util.FRP
+import Util.HTML
+import Util.HTML.Attributes
+import Util.HTML.Elements
+
+menuLink :: String -&gt; String -&gt; Html
+menuLink title item = do
+    a ! href ("#" ++ item) 
+        $&lt; title
+
+buildElementList :: [String] -&gt; IO [(Element, Element)]
+buildElementList xs = (sequence $ map build xs) &gt;&gt;= return . sortedElements . concat 
+
+build :: String -&gt; IO [(Element, Element)]
+build it = getElementById it &gt;&gt;= sequence . maybeToList . fmap f
+  where f e = do li &lt;- createElement "li"
+                 innerHtml e &gt;&gt;= setInnerHtml li . renderHtml . flip menuLink it
+                 return (e, li)
+
+sortedElements :: [(Element, Element)] -&gt; [(Element, Element)]
+sortedElements = (sortBy . on compare) (negate . __offsetTop . fst)
+
+findFirstElement :: [(Element, Element)] -&gt; Int -&gt; Maybe (Element, Element)
+findFirstElement es y = flip find es $ \(e, _) -&gt; __offsetTop e &lt; y + 5
+
+menuHtml :: [(Element, Element)] -&gt; IO Element
+menuHtml es = do 
+    ul &lt;- createElement "ul"
+    setAttribute ul "id" "top-menu"
+    sequence $ map (flip (~&gt;) ul) $ reverse $ map snd es
+    return ul
+
+foreign import js "%1.offsetTop"
+    __offsetTop :: Element -&gt; Int
+
+setClassAttribute :: Maybe (Element, Element) -&gt; IO ()
+setClassAttribute = sequence_ . maybeToList . fmap f 
+  where f :: (Element, Element) -&gt; IO ()
+        f (_, e) = do old &lt;- getElementsByClassName "active"
+                      sequence $ flip map old $ \x -&gt; setAttribute x "class" ""
+                      setAttribute e "class" "active"
+
+main :: IO ()
+main = do
+    wrap $ do
+        body &lt;- setup
+        elements &lt;- buildElementList ["item-1", "item-2", "item-3", "item-4", "item-5"]
+        menuHtml elements &gt;&gt;= appendChild body
+        let f = setClassAttribute . (findFirstElement elements)
+        attach $ fmap f scrollYSignal
+
+    &gt;&gt;= onReady
+
+setup :: IO Element
+setup = do
+    body &lt;- documentBody
+    div  &lt;- createElement "div"
+    setInnerHtml div  $ "&lt;h1 id=\"item-1\"&gt;Item 1&lt;/h1&gt;" ++ blah
+                     ++ "&lt;h1 id=\"item-2\"&gt;Item 2&lt;/h1&gt;" ++ blah
+                     ++ "&lt;h1 id=\"item-3\"&gt;Item 3&lt;/h1&gt;" ++ blah
+                     ++ "&lt;h1 id=\"item-4\"&gt;Item 4&lt;/h1&gt;" ++ blah
+                     ++ "&lt;h1 id=\"item-5\"&gt;Item 5&lt;/h1&gt;" 
+                     ++ (concat $ take 5 $ repeat blah)
+    div ~&gt; body
+    st &lt;- createElement "style"
+    setInnerHtml st css
+    st ~&gt; body
+    return body
+
+blah :: String
+blah = concat $ take 7 $ repeat "&lt;p&gt;Smorgosbord!&lt;/p&gt;"
+
+-- CSS borrowed from http://jsfiddle.net/mekwall/up4nu/
+css :: String
+css = "body { font-family: Helvetica, Arial; } \
+      \#top-menu { list-style: none; position: fixed; z-index: 1; background: white; left: 250px; right: 0; top: 0; } \ 
+      \#top-menu li { float: left; } \
+      \#top-menu a { display: block; padding: 5px 25px 7px 25px; -webkit-transition: 1s all ease; -moz-transition: 1s all ease; transition: 1s all ease; border-top: 3px solid white; color: #666; text-decoration: none; } \
+      \#top-menu a:hover { color: #000; } \
+      \#top-menu li.active a { border-top: 3px solid #333; color: #333; font-weight: bold; }" </code>
+</pre>
+<hr>
+<a class="anchor" id="storage"></a>
+<h2>Storage</h2>
+<pre>
+<code>import Util.Storage </code>
+</pre>
+<blockquote class="intro">The <code>Util.Storage</code> module provides a key-value based
+database interface for persisting data in the browser's local
+storage. Assisted by the <code>JSON</code> module, any Haskell data
+type can be stored using a simple setter/getter paradigm.</blockquote>
+<pre>
+<code>data User = User
+    { name     :: String
+    , shoeSize :: Float
+    } </code>
+</pre>
+<p>To store a record of this type in the database under the key
+<code>"user-1"</code>, we use the syntax,</p>
+<pre>
+<code>set "user-1" $ User "Franz" 42.5 </code>
+</pre>
+<p>and to retrieve a value back from the store, we simply look
+inside the <code>Maybe</code> value returned by
+<code>get</code>:</p>
+<pre>
+<code>u &lt;- get "user-1"
+case u of
+    Nothing -&gt; print "No such user in the DB."
+    Just u  -&gt; print $ (name u) ++ " has shoe size  " ++ show (shoeSize u) </code>
+</pre>
+<p><strong>Note:</strong> Required instances for
+<code>ToJSON</code> and <code>FromJSON</code> omitted here for
+brevity.</p>
+<p>This module is a wrapper for the jStorage JavaScript plugin. It
+can be <a href=
+"http://github.com/andris9/jStorage/raw/master/jstorage.js">downloaded
+from here</a>. jStorage is &copy; 2010&#8208;2012 Andris Reinman,
+and licensed under <a href=
+"http://unlicense.org/">Unlicense</a>.</p>
+<h4>JS dependency</h4>
+<p>To use this module, you need to make sure that the
+<code>jstorage.js</code> plugin is available and included in your
+HTML file. The easiest way to achieve this is by adding a
+<code>&lt;script&gt;</code> tag dynamically to your document with
+the help of the <code>addScript</code> function from
+<code>Util.Base</code>.</p>
+<pre>
+<code>main :: IO ()
+main = do
+    addScript "../../js/jstorage.js"
+    wrap $ do
+        ...
+    &gt;&gt;= onLoad  -- We must use onLoad instead of onReady to wait for
+                -- the added scripts to </code>
+</pre>
+<h4>The essentials: Set and get</h4>
+<p>These are the two fundamental operations in jStorage.</p>
+<pre>
+<code>-- | Saves a value to local storage.
+set :: (ToJSON a) =&gt; String -&gt; a -&gt; IO ()
+-- | Retrieves the stored value matching the given key, if one exists.
+get :: (FromJSON a) =&gt; String -&gt; IO (Maybe a) </code>
+</pre>
+<p>More efficient <code>PackedString</code> versions of these are
+also available under the names <code>set'</code> and
+<code>get'</code>.</p>
+<h4>More operations</h4>
+<p>Other useful functions are <code>deleteKey</code>, which is used
+to remove a key from the storage,</p>
+<pre>
+<code>deleteKey :: String -&gt; IO ()
+deleteKey' :: PackedString -&gt; IO () </code>
+</pre>
+<p>and <code>index</code> &ndash; it returns all keys currently in
+use as a list.</p>
+<pre>
+<code>index :: IO [String]
+index' :: IO [PackedString] </code>
+</pre>
+<h4>Example: A product database</h4>
+<p>The following example saves a list of products in the
+database.</p>
+<pre>
+<code>module Main where
+
+import Util.Base
+import Util.Storage
+
+data Product = Product
+    { pid      :: !Int
+    , name     :: !String
+    , category :: !Category
+    , price    :: !Float
+    } deriving (Show)
+
+data Category = Clothing | Books | Food | Toys
+    deriving (Show)
+
+-- FromJSON and ToJSON boilerplate
+instance FromJSON Product where
+    fromJSON (Object v) = 
+        Product &lt;$&gt; v .! "id"
+                &lt;*&gt; v .! "name"
+                &lt;*&gt; v .! "category"
+                &lt;*&gt; v .! "price"
+    fromJSON _ = Nothing
+
+instance FromJSON Category where
+    fromJSON (Str "clothing") = Just Clothing
+    fromJSON (Str "books")    = Just Books
+    fromJSON (Str "food")     = Just Food
+    fromJSON (Str "toys")     = Just Toys
+    fromJSON _ = Nothing
+
+instance FromJSON [Product] where
+    fromJSON = mapFrom
+
+instance ToJSON Product where
+    toJSON (Product { pid      = pid
+                    , name     = name
+                    , category = category
+                    , price    = price }) 
+      = obj [ "id"       |= pid
+            , "name"     |= name
+            , "category" |= category
+            , "price"    |= price
+            ]
+
+instance ToJSON Category where
+    toJSON Clothing = Str "clothing"
+    toJSON Books    = Str "books"
+    toJSON Food     = Str "food"
+    toJSON Toys     = Str "toys"
+
+instance ToJSON [Product] where
+    toJSON = mapTo
+
+-- Let's create a list of products
+products :: [Product]
+products =
+    [ Product 1 "Clown shoes"        Clothing 10.0
+    , Product 2 "Real World Haskell" Books    20.0
+    , Product 3 "Palak paneer"       Food     15.0
+    , Product 4 "Tuxedo"             Clothing 25.0
+    ]
+
+-- Store products in the local store
+storeProducts :: IO ()
+storeProducts = do
+    set "my-products" products 
+
+main :: IO ()
+main = do
+    addScript "../../js/jstorage.js"
+    wrap $ do
+        storeProducts
+    &gt;&gt;= onLoad </code>
+</pre>
+<p>To read the data back from the database, change
+<code>main</code> to,</p>
+<pre>
+<code>main = do
+    addScript "../../js/jstorage.js"
+    wrap $ do
+        readProducts
+        readNonExistingKey
+        readExistingKeyIncorrectly
+    &gt;&gt;= onLoad </code>
+</pre>
+<p>add these functions,</p>
+<pre>
+<code>readProducts :: IO ()
+readProducts = do
+    p &lt;- get "my-products" 
+    case p of
+      Nothing -&gt; print "Key not found."
+      Just ps -&gt; f ps
+    where f :: [Product] -&gt; IO ()
+          f s = print $ show s ++ "&lt;br&gt;"
+
+readNonExistingKey :: IO ()
+readNonExistingKey = do
+    p &lt;- get "most-likely-this-key-does-not-exist" 
+    case p of
+      Nothing         -&gt; print $ "Nope!" ++ "&lt;br&gt;"
+      Just (v :: Int) -&gt; print "Who could have known?"
+
+readExistingKeyIncorrectly :: IO ()
+readExistingKeyIncorrectly = do
+    p &lt;- get "my-products" 
+    case p of
+      Nothing -&gt; print $ "No parse, dude!" ++ "&lt;br&gt;"
+      Just ps -&gt; f ps
+    where f :: [Int] -&gt; IO ()
+          f = print </code>
+</pre>
+<p>&hellip; then compile and run the program again. If everything
+works,</p>
+<ul>
+   <li><code>readProducts</code> will print out the list of
+   products;</li>
+   <li><code>readNonExistingKey</code> will (most likely) print out
+   &ldquo;Nope!&rdquo; since no key is found; and</li>
+   <li><code>readExistingKeyIncorrectly</code> will also fail,
+   since we cannot parse a <code>Product</code> as a
+   <code>[Int]</code>.</li>
+</ul>
+<hr>
+<a class="anchor" id="router"></a>
+<h2>Router</h2>
+<blockquote class="intro">The Router module offers an easy-to-use solution for hashtag
+navigation. <code>Util.Router</code> makes it possible to pattern
+match over urls using simple <code>do</code>-notation.</blockquote> 
+<p>As an example of what this looks like, the following route matches urls
+of the format <code>post/show/%n</code> where <code>%n</code> must
+be an integer value:</p>
+<pre>
+<code>showPostRoute :: Route
+showPostRoute = do
+    atom "post"
+    atom "show"
+    pid &lt;- num
+    go $ showPost pid   -- some IO () action </code>
+</pre>
+<h4>Instantiating the router</h4>
+<p><code>setMap</code> installs the required event listeners and
+takes care of the rest of the internals.</p>
+<pre>
+<code>setMap :: [Route] -&gt; IO () </code>
+</pre>
+<p>This is how it is typically used:</p>
+<pre>
+<code>main = do
+    wrap $ do
+        setMap [ showPostRoute
+               , createPostRoute
+               , editPostRoute
+               ]
+    &gt;&gt;= onLoad </code>
+</pre>
+<p>When a user changes the hash fragment of the url (or clicks on a
+link that does so), the application will invoke the router and run
+through the list of routes to look for a match.</p>
+<p>Use <code>go</code> at the end of your route to run the desired
+action.</p>
+<pre>
+<code>go :: IO () -&gt; RouteM (IO ()) </code>
+</pre>
+<p>Behind the scenes, the <code>RouteM</code> type is a monadic
+parser combinator, and <code>Route</code> is a type synonym for
+<code>RouteM (IO ())</code>.</p>
+<pre>
+<code>data RouteM a = RouteM { runR :: [String] -&gt; (Maybe a, [String]) }
+instance Monad RouteM where
+    return a = RouteM $ \s -&gt; (Just a, s)
+    m &gt;&gt;= k  = RouteM $ \s -&gt; let (a, t) = runR m s
+                              in  case a of
+                                    Nothing -&gt; (Nothing, s)
+                                    Just a' -&gt; runR (k a') t
+type Route = RouteM (IO ()) </code>
+</pre>
+<h4>Building blocks</h4>
+<p>Even though it is perfectly possible to build your own, more
+complicated parsers (after all, that's the whole idea behind parser
+combinators), the following built-in types should cover the basic
+use cases:</p>
+<ul>
+   <li><code>atom</code> Matches a string literal.</li>
+   <li><code>num</code> Reads a numeric segment (an integer).</li>
+   <li><code>str</code> Reads a text segment.</li>
+</ul>
+<p>To match <code>user/%s/comment/show/%n</code>, we would
+write&hellip;</p>
+<pre>
+<code>showCommentRoute :: Route
+showCommentRoute = do
+    atom "user"
+    uname &lt;- str
+    atom "comment"
+    atom "show"
+    cid &lt;- num
+    go $ showComment uname cid
+
+showComment :: String -&gt; Int -&gt; IO ()
+showComment = ... </code>
+</pre>
+<p>That is pretty much all there is to it. Here is an example that
+prints out some links on the page to get a feel for how the
+navigation works.</p>
+<blockquote>
+You can also run this example <a href="examples/example2-run.html">directly in the browser</a>.
+</blockquote>
+<pre>
+<code>module Main where
+import Control.Applicative              ( (&lt;$&gt;), (&lt;*&gt;) )
+import Data.Maybe                       ( maybeToList )
+import Util.DOM
+import Util.Router
+import Util.String
+
+showPost :: Int -&gt; IO ()
+showPost pid = out $ "show post #" ++ show pid ++ "&lt;br&gt;"
+
+newPost :: IO ()
+newPost = out $ "create new post" ++ "&lt;br&gt;"
+
+byUser :: String -&gt; IO ()
+byUser n = out $ "show posts by user " ++ n ++ "&lt;br&gt;"
+
+threeNumbers :: Int -&gt; Int -&gt; Int -&gt; IO ()
+threeNumbers a b c = out $
+    show a ++ ", " ++ show b ++ ", " ++ show c ++ "&lt;br&gt;"
+
+showPostRoute :: Route
+showPostRoute = do
+    atom "post"
+    atom "show"
+    pid &lt;- num
+    go $ showPost pid
+
+newPostRoute :: Route
+newPostRoute = do
+    atom "post"
+    atom "new"
+    go newPost
+
+postsByUserRoute :: Route
+postsByUserRoute = do
+    atom "post"
+    atom "user"
+    name &lt;- str
+    atom "please"
+    go $ byUser name
+
+anotherRoute :: Route
+anotherRoute = do
+    atom "read"
+    a &lt;- num
+    b &lt;- num
+    c &lt;- num
+    go $ threeNumbers a b c
+
+homeRoute :: Route
+homeRoute =
+    go $ out $ "Home" ++ "&lt;br&gt;"
+
+main :: IO ()
+main = do
+    wrap $ do
+        body &lt;- documentBody
+        div &lt;- createElement "div"
+        setInnerHtml div "&lt;ul&gt;\
+                         \&lt;li&gt;&lt;a href=\"#post/show/1\"&gt;#post/show/1&lt;/a&gt;&lt;/li&gt;\
+                         \&lt;li&gt;&lt;a href=\"#post/new\"&gt;#post/new&lt;/a&gt;&lt;/li&gt;\
+                         \&lt;li&gt;&lt;a href=\"#post/user/bob/please\"&gt;#post/user/bob/please&lt;/a&gt;&lt;/li&gt;\
+                         \&lt;li&gt;&lt;a href=\"#read/1/2/3\"&gt;#read/1/2/3&lt;/a&gt;&lt;/li&gt;\
+                         \&lt;li&gt;&lt;a href=\"#/\"&gt;#/&lt;/a&gt;&lt;/li&gt;\
+                         \&lt;/ul&gt;"
+        div ~&gt; body
+        out &lt;- createElement "div"
+        setAttribute out "id" "myStdOut"
+        out ~&gt; body
+
+        -- Assign routes
+        setMap [ showPostRoute
+               , newPostRoute
+               , postsByUserRoute
+               , anotherRoute
+               , homeRoute 
+               ]
+
+    &gt;&gt;= onReady 
+
+out :: String -&gt; IO ()
+out str = getElementById "myStdOut" &gt;&gt;= sequence_ . maybeToList . f 
+  where f x = setInnerHtml &lt;$&gt; x &lt;*&gt; Just str</code>
+</pre>
+<hr>
+<a class="anchor" id="common-errors"></a>
+<h2>Common errors</h2>
+<h3>Compile-time errors</h3>
+<blockquote>
+   <pre>
+<code>error: primStringToPackedString undeclared here (not in a function) </code>
+</pre>
+</blockquote>
+<p>This usually happens when you forget to specify the
+<code>-tjs</code> flag.</p>
+<h3>Runtime (JavaScript) errors</h3>
+<blockquote>
+   <pre>
+<code>Uncaught ReferenceError: $ is not defined </code>
+</pre>
+</blockquote>
+<p>This happened to me when I used <code>onReady</code> instead of
+<code>onLoad</code> together with the <code>addScript</code>
+helper.</p>
+<pre>
+<code>main = do
+    addScript "../../js/jstorage.js"
+    wrap $ do
+        -- stuff
+    &gt;&gt;= onLoad    -- Don't use onReady here </code>
+</pre>
+<p>It could also indicate that the file is missing, or not
+readable.</p>
+<blockquote>
+   <pre>
+<code>Uncaught TypeError: Object 0 has no method '__aN__' </code>
+</pre>
+</blockquote>
+<hr>
+<p>&copy; 2014 Johannes Hild&eacute;n. Code licensed under <a href="https://github.com/johanneshilden/liquid-epsilon/blob/master/LICENSE">BSD</a>. 
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="js/jquery.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/docs.min.js"></script>
+  </body>
+</html>
