@@ -83,18 +83,26 @@ locationHash = __locationHash >>= return . components . unpack
 
 -- | Set routing rules.
 setMap :: [Route] -> IO ()
-setMap r = (wrap $ route r) >>= onHashChange >> route r
+setMap r = (wrap1 $ route r) >>= onHashChange >> return ()
   -- The trailing route r call is to invoke the current
   -- route when the page loads.
-  where route :: [Route] -> IO ()
-        route rs = do h <- locationHash
-                      runRoutes h r
+  where route :: [Route] -> Ptr a -> IO b
+        route rs e = do h <- locationHash
+                        runRoutes h r
+                        __preventDefault e
+                        return __false
+
+foreign import js "%1.preventDefault()"
+    __preventDefault :: Ptr a -> IO ()
 
 foreign import js "window.location.hash"
     __locationHash :: IO PackedString
 
 foreign import js "wrapper"
     wrap :: IO a -> IO (FunPtr (IO a))
+
+foreign import js "wrapper"
+    wrap1 :: (Ptr a -> IO b) -> IO (FunPtr (Ptr a -> IO b))
 
 foreign import js "window.addEventListener('load', %1, false)"
     onLoad :: FunPtr (IO a) -> IO ()
@@ -103,5 +111,8 @@ foreign import js "document.addEventListener('DOMContentLoaded', %1, false)"
     onReady :: FunPtr (IO a) -> IO ()
 
 foreign import js "window.addEventListener('hashchange', %1, false)"
-    onHashChange :: FunPtr (IO ()) -> IO ()
+    onHashChange :: FunPtr (Ptr a -> IO b) -> IO ()
+
+foreign import js "false"
+    __false :: a
 
