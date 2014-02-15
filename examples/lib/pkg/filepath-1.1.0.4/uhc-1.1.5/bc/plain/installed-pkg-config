@@ -1,0 +1,1 @@
+exposed-modules: System.FilePath System.FilePath.Posix System.FilePath.Internal System.FilePath.Windows

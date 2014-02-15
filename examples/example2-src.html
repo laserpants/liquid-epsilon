@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="../../assets/ico/favicon.ico">
+
+    <title>Liquid Epsilon</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="../css/dashboard.css" rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy this line! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body style="padding:0;">
+
+
+<pre>
+<code>module Main where
+import Control.Applicative              ( (&lt;$&gt;), (&lt;*&gt;) )
+import Data.Maybe                       ( maybeToList )
+import Util.DOM
+import Util.Router
+import Util.String
+
+showPost :: Int -&gt; IO ()
+showPost pid = out $ "show post #" ++ show pid ++ "&lt;br&gt;"
+
+newPost :: IO ()
+newPost = out $ "create new post" ++ "&lt;br&gt;"
+
+byUser :: String -&gt; IO ()
+byUser n = out $ "show posts by user " ++ n ++ "&lt;br&gt;"
+
+threeNumbers :: Int -&gt; Int -&gt; Int -&gt; IO ()
+threeNumbers a b c = out $
+    show a ++ ", " ++ show b ++ ", " ++ show c ++ "&lt;br&gt;"
+
+showPostRoute :: Route
+showPostRoute = do
+    atom "post"
+    atom "show"
+    pid &lt;- num
+    go $ showPost pid
+
+newPostRoute :: Route
+newPostRoute = do
+    atom "post"
+    atom "new"
+    go newPost
+
+postsByUserRoute :: Route
+postsByUserRoute = do
+    atom "post"
+    atom "user"
+    name &lt;- str
+    atom "please"
+    go $ byUser name
+
+anotherRoute :: Route
+anotherRoute = do
+    atom "read"
+    a &lt;- num
+    b &lt;- num
+    c &lt;- num
+    go $ threeNumbers a b c
+
+homeRoute :: Route
+homeRoute =
+    go $ out $ "Home" ++ "&lt;br&gt;"
+
+main :: IO ()
+main = do
+    wrap $ do
+        body &lt;- documentBody
+        div &lt;- createElement "div"
+        setInnerHtml div "&lt;ul&gt;\
+                         \&lt;li&gt;&lt;a href=\"#post/show/1\"&gt;#post/show/1&lt;/a&gt;&lt;/li&gt;\
+                         \&lt;li&gt;&lt;a href=\"#post/new\"&gt;#post/new&lt;/a&gt;&lt;/li&gt;\
+                         \&lt;li&gt;&lt;a href=\"#post/user/bob/please\"&gt;#post/user/bob/please&lt;/a&gt;&lt;/li&gt;\
+                         \&lt;li&gt;&lt;a href=\"#read/1/2/3\"&gt;#read/1/2/3&lt;/a&gt;&lt;/li&gt;\
+                         \&lt;li&gt;&lt;a href=\"#/\"&gt;#/&lt;/a&gt;&lt;/li&gt;\
+                         \&lt;/ul&gt;"
+        div ~&gt; body
+        out &lt;- createElement "div"
+        setAttribute out "id" "myStdOut"
+        out ~&gt; body
+
+        -- Assign routes
+        setMap [ showPostRoute
+               , newPostRoute
+               , postsByUserRoute
+               , anotherRoute
+               , homeRoute 
+               ]
+
+    &gt;&gt;= onReady 
+
+out :: String -&gt; IO ()
+out str = getElementById "myStdOut" &gt;&gt;= sequence_ . maybeToList . f 
+  where f x = setInnerHtml &lt;$&gt; x &lt;*&gt; Just str</code>
+</pre>
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="../js/jquery.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/docs.min.js"></script>
+  </body>
+</html>

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="../../assets/ico/favicon.ico">
+
+    <title>Liquid Epsilon</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="../css/dashboard.css" rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy this line! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body style="padding:0;">
+
+
+<pre style="border:0; overflow-x:hidden; overflow-y:hidden;">
+<code>module Main where
+
+import Data.List                    ( find, sortBy )
+import Data.Maybe                   ( maybeToList )
+import Data.Function                ( on )
+import Util.Base
+import Util.DOM
+import Util.FRP
+import Util.HTML
+import Util.HTML.Attributes
+import Util.HTML.Elements
+
+menuLink :: String -&gt; String -&gt; Html
+menuLink title item = do
+    a ! href ("#" ++ item) 
+        $&lt; title
+
+buildElementList :: [String] -&gt; IO [(Element, Element)]
+buildElementList xs = (sequence $ map build xs) &gt;&gt;= return . sortedElements . concat 
+
+build :: String -&gt; IO [(Element, Element)]
+build it = getElementById it &gt;&gt;= sequence . maybeToList . fmap f
+  where f e = do li &lt;- createElement "li"
+                 innerHtml e &gt;&gt;= setInnerHtml li . renderHtml . flip menuLink it
+                 return (e, li)
+
+sortedElements :: [(Element, Element)] -&gt; [(Element, Element)]
+sortedElements = (sortBy . on compare) (negate . __offsetTop . fst)
+
+findFirstElement :: [(Element, Element)] -&gt; Int -&gt; Maybe (Element, Element)
+findFirstElement es y = flip find es $ \(e, _) -&gt; __offsetTop e &lt; y + 5
+
+menuHtml :: [(Element, Element)] -&gt; IO Element
+menuHtml es = do 
+    ul &lt;- createElement "ul"
+    setAttribute ul "id" "top-menu"
+    sequence $ map (flip (~&gt;) ul) $ reverse $ map snd es
+    return ul
+
+foreign import js "%1.offsetTop"
+    __offsetTop :: Element -&gt; Int
+
+setClassAttribute :: Maybe (Element, Element) -&gt; IO ()
+setClassAttribute = sequence_ . maybeToList . fmap f 
+  where f :: (Element, Element) -&gt; IO ()
+        f (_, e) = do old &lt;- getElementsByClassName "active"
+                      sequence $ flip map old $ \x -&gt; setAttribute x "class" ""
+                      setAttribute e "class" "active"
+
+main :: IO ()
+main = do
+    wrap $ do
+        body &lt;- setup
+        elements &lt;- buildElementList ["item-1", "item-2", "item-3", "item-4", "item-5"]
+        menuHtml elements &gt;&gt;= appendChild body
+        let f = setClassAttribute . (findFirstElement elements)
+        attach $ fmap f scrollYSignal
+
+    &gt;&gt;= onReady
+
+setup :: IO Element
+setup = do
+    body &lt;- documentBody
+    div  &lt;- createElement "div"
+    setInnerHtml div  $ "&lt;h1 id=\"item-1\"&gt;Item 1&lt;/h1&gt;" ++ blah
+                     ++ "&lt;h1 id=\"item-2\"&gt;Item 2&lt;/h1&gt;" ++ blah
+                     ++ "&lt;h1 id=\"item-3\"&gt;Item 3&lt;/h1&gt;" ++ blah
+                     ++ "&lt;h1 id=\"item-4\"&gt;Item 4&lt;/h1&gt;" ++ blah
+                     ++ "&lt;h1 id=\"item-5\"&gt;Item 5&lt;/h1&gt;" 
+                     ++ (concat $ take 5 $ repeat blah)
+    div ~&gt; body
+    st &lt;- createElement "style"
+    setInnerHtml st css
+    st ~&gt; body
+    return body
+
+blah :: String
+blah = concat $ take 7 $ repeat "&lt;p&gt;Smorgosbord!&lt;/p&gt;"
+
+-- CSS borrowed from http://jsfiddle.net/mekwall/up4nu/
+css :: String
+css = "body { font-family: Helvetica, Arial; } \
+      \#top-menu { list-style: none; position: fixed; z-index: 1; background: white; left: 250px; right: 0; top: 0; } \ 
+      \#top-menu li { float: left; } \
+      \#top-menu a { display: block; padding: 5px 25px 7px 25px; -webkit-transition: 1s all ease; -moz-transition: 1s all ease; transition: 1s all ease; border-top: 3px solid white; color: #666; text-decoration: none; } \
+      \#top-menu a:hover { color: #000; } \
+      \#top-menu li.active a { border-top: 3px solid #333; color: #333; font-weight: bold; }" </code>
+</pre>
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="../js/jquery.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/docs.min.js"></script>
+  </body>
+</html>
