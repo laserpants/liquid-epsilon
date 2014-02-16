@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="../../assets/ico/favicon.ico">
+
+    <title>Liquid Epsilon</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="../css/dashboard.css" rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy this line! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body style="padding:0;">
+
+<pre>
+<code>module Main where
+
+import Control.Monad                  ( msum )
+import Util.Base
+import Util.DOM
+import Util.FRP
+
+type Validator = String -&gt; Maybe String
+
+nonEmpty :: String -&gt; Maybe String
+nonEmpty "" = Just "This field must not be empty."
+nonEmpty _  = Nothing
+
+numeric :: String -&gt; Maybe String
+numeric s = case f s of
+              True  -&gt; Nothing
+              False -&gt; Just "Not a valid integer value."
+  where f = and . (map $ flip elem "0123456789") 
+
+validate :: [Validator] -&gt; Element -&gt; String -&gt; IO Element
+validate vs e str = setInnerHtml e $
+    case msum $ vs &lt;*&gt; [str] of
+      Just msg -&gt; msg
+      Nothing  -&gt; ""
+
+main :: IO ()
+main = do
+    wrap $ do
+        body &lt;- documentBody
+        win &lt;- window
+        input &lt;- createElement "input"
+        input ~&gt; body
+        div &lt;- createElement "div"
+        div ~&gt; body
+        let f = validate [nonEmpty, numeric] div in 
+            attach $ fmap f (inputValue input)
+
+    &gt;&gt;= onReady </code>
+</pre>
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="../js/jquery.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/docs.min.js"></script>
+  </body>
+</html>
