@@ -92,9 +92,12 @@ locationHash = __locationHash >>= return . components . unpack
 
 -- | Set routing rules.
 setMap :: [Route] -> IO ()
-setMap r = (wrap1 $ route r) >>= onHashChange >> return ()
-  -- The trailing route r call is to invoke the current
-  -- route when the page loads.
+setMap r = do
+    x <- wrap1 $ route r
+    onHashChange x 
+    -- This is to run the active route when the page loads.
+    h <- locationHash
+    runRoutes h r
   where route :: [Route] -> Ptr a -> IO b
         route rs e = do h <- locationHash
                         runRoutes h r
