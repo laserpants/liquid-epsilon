@@ -2,8 +2,9 @@ module Util.HTML.Attributes where
 
 import Util.HTML
 
-align, alt, autocomplete, background, border, charset, checked, _class, cols, colspan, content, enctype, for, height, href, http_equiv, _id, maxlength, method, name, placeholder, role, rows, rowspan, selected, size, src, style, tabindex, target, title, _type, value, width :: String -> Attribute
+action, align, alt, autocomplete, background, border, charset, checked, _class, cols, colspan, content, enctype, for, height, href, http_equiv, _id, maxlength, method, name, placeholder, role, rows, rowspan, selected, size, src, style, tabindex, target, title, _type, value, width :: String -> Attribute
 
+action         = makeAttr "action"
 align          = makeAttr "align"
 alt            = makeAttr "alt"
 autocomplete   = makeAttr "autocomplete"
