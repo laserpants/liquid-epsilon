@@ -5,6 +5,8 @@ module Util.Router
     , atom
     , go
     , components
+    , setLocationHash
+    , setLocationHash'
     , locationHash
     , setMap
     , wrap
@@ -76,6 +78,13 @@ components xs = f xs [] []
         g a b | "" == a    = b
               | otherwise = (a:b)
 
+-- | Set the anchor portion of the current URL.
+setLocationHash :: String -> IO ()
+setLocationHash = setLocationHash' . pack
+
+setLocationHash' :: PackedString -> IO ()
+setLocationHash' h = __set (pack "hash") h __location >> return ()
+
 -- | Return a list of the slash-separated segments of the 
 -- anchor portion of the current URL.
 locationHash :: IO [String]
@@ -97,6 +106,12 @@ foreign import js "%1.preventDefault()"
 
 foreign import js "window.location.hash"
     __locationHash :: IO PackedString
+
+foreign import prim "primSetAttr"
+    __set :: PackedString -> a -> Ptr p -> IO (Ptr p)
+
+foreign import js "location"
+    __location :: a
 
 foreign import js "wrapper"
     wrap :: IO a -> IO (FunPtr (IO a))
