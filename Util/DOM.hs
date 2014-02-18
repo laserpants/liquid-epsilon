@@ -15,8 +15,8 @@ module Util.DOM
     , removeAttribute'
     , setValue
     , setValue'
-    , inputValue
-    , inputValue'
+    , elementValue
+    , elementValue'
     , toString
     , toString'
     , innerHtml
@@ -112,11 +112,11 @@ setValue e v = __set (pack "value") (pack v) e >> return ()
 setValue' :: Element -> PackedString -> IO ()
 setValue' e v = __set (pack "value") v e >> return ()
 
-inputValue :: Element -> IO String
-inputValue e = __inputValue e >>= return . unpack 
+elementValue :: Element -> IO String
+elementValue e = __elementValue e >>= return . unpack 
 
-inputValue' :: Element -> IO PackedString
-inputValue' = __inputValue
+elementValue' :: Element -> IO PackedString
+elementValue' = __elementValue
 
 -- | Stringify an element.
 toString :: Element -> IO String
@@ -265,4 +265,4 @@ foreign import js "%1.style"
     __style :: Element -> IO StyleObject
 
 foreign import js "%1.value"
-    __inputValue :: Element -> IO PackedString
+    __elementValue :: Element -> IO PackedString
