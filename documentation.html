@@ -516,7 +516,7 @@ portion of the current URL.</p>
 <a class="anchor" id="util-socket"></a>
 <hr>
 <h2>Util.Socket</h2>
-<p>WebSockets client API.</p>
+<p>WebSocket client API.</p>
 <h4>Public function interface</h4>
 <ul>
    <li>newSocket</li>
@@ -563,16 +563,16 @@ portion of the current URL.</p>
 </ul>
 <hr>
 <h4>_readState</h4>
-<pre class="api"><code class="api">setMap :: [Route] -&gt; IO ()</code>
+<pre class="api"><code class="api">_readState :: String -&gt; IO a</code>
 </pre>
 <p>abc...</p>
 <h4>_setState</h4>
-<pre class="api"><code class="api">setMap :: [Route] -&gt; IO ()</code>
+<pre class="api"><code class="api">_setState :: String -&gt; a -&gt; IO ()</code>
 </pre>
 <p>abc...</p>
 
-<hr>
 <a class="anchor" id="util-storage"></a>
+<hr>
 <h2>Util.Storage</h2>
 <p>Key-value based local storage interface</p>
 <h4>Public function interface</h4>
