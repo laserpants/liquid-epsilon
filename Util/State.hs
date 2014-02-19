@@ -8,7 +8,7 @@ import Util.DOM              ( window )
 import Util.String           ( pack )
 
 _readState :: String -> IO a
-_readState s = __readState p $ pack $ "__state__" ++ s
+_readState s = __readState $ pack $ "__state__" ++ s
 
 foreign import js "window[%1]"
     __readState :: PackedString -> IO a
