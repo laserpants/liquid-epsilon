@@ -71,6 +71,7 @@
             <li><a href="#frp">FRP</a></li>
             <li><a href="#storage">Storage</a></li>
             <li><a href="#router">Router</a></li>
+            <li><a href="#state">State</a></li>
             <li><a href="#common-errors">Common errors</a></li>
           </ul>
         </div>
@@ -1629,6 +1630,7 @@ works,</p>
 <hr>
 <a class="anchor" id="router"></a>
 <h2>Router</h2>
+<pre><code>import Util.Router</code></pre>
 <blockquote class="intro">The Router module offers an easy-to-use solution for hashtag
 navigation. <code>Util.Router</code> makes it possible to pattern
 match over urls using simple <code>do</code>-notation.</blockquote> 
@@ -1795,6 +1797,62 @@ main = do
 out :: String -&gt; IO ()
 out str = getElementById "myStdOut" &gt;&gt;= sequence_ . maybeToList . f 
   where f x = setInnerHtml &lt;$&gt; x &lt;*&gt; Just str</code>
+</pre>
+<hr>
+<a class="anchor" id="state"></a>
+<h2>State</h2>
+<pre>
+<code>import Util.State</code>
+</pre>
+<blockquote class="intro">This module takes advantage of the DOM tree and a hidden property to store global application state.</blockquote> 
+<blockquote>
+    <small><strong>Note:</strong> Do not call <code style="color:#777">_readState</code> or <code style="color:#777">_setState</code> directly from application code. Instead, first create type-safe wrappers as described below.</small>
+</blockquote>
+<h4>How to use</h4>
+<p>Create a data type with the state you want to make available to your application and reimplement <code>_readState</code> and <code>_setState</code> accordingly.
+<pre>
+<code>data AppState = AppState
+    { user    :: String
+    , friends :: [String]
+    }
+    
+readState :: IO AppState
+readState = _readState "app_state"
+
+setState :: AppState -&gt; IO ()
+setState = _setState "app_state"</code>
+</pre>
+<p>
+Behind the scenes, the data is written to a <code>__state__app_state</code> attribute on the window object. The <code>app_state</code> suffix acts as a simple namespace to allow multiple state objects within a single application. Alternatively, you can simply specify the empty <code>String</code> to use the <code>__state__</code> attribute on its own (e.g. <code>_setState ""</code>).
+</p>
+<p>
+This is how you typically use these functions:
+</p>
+<pre>
+<code>addFriend :: String -> IO ()
+addFriend f = do
+    (AppState u fs) <- readState
+    setState $ AppState u (f:fs) </code>
+</pre>
+<hr>
+<a class="anchor" id="socket"></a>
+<h2>Socket</h2>
+<pre>
+<code>import Util.Socket</code>
+</pre>
+<blockquote class="intro">The WebSocket protocol enables full-duplex communication over a single TCP connection.</blockquote> 
+<p>Read more about the WebSocket specification <a href="http://www.websocket.org/">here</a>.</p>
+<p>The easiest way to implement a WebSocket client using <code>Util.Socket</code> is to take advantage of the <code>connectAnd</code> helper function:</p>
+<pre><code>connectAnd :: String              -- ^ URI
+           -> (Socket -> IO ())   -- ^ Callback with socket handle as argument
+           -> IO ()</code></pre>
+<p>For instance&hellip;</p>
+<pre>
+<code>connectAnd "ws://localhost:9160" $ \sock -> do
+    onOpen sock $ do
+        send sock $ "Hi!"
+    onMessage sock $ \msg -> do
+        -- Process incoming message here...</code>
 </pre>
 <hr>
 <a class="anchor" id="common-errors"></a>
