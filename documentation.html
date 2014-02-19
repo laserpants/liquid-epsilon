@@ -71,6 +71,8 @@
             <li><a href="#util-handlebars">Util.Handlebars</a></li>
             <li><a href="#util-json">Util.JSON</a></li>
             <li><a href="#util-router">Util.Router</a></li>
+            <li><a href="#util-socket">Util.Socket</a></li>
+            <li><a href="#util-state">Util.State</a></li>
             <li><a href="#util-storage">Util.Storage</a></li>
             <li><a href="#util-string">Util.String</a></li>
           </ul>
@@ -511,8 +513,66 @@ portion of the current URL.</p>
 <pre class="api"><code class="api">setMap :: [Route] -&gt; IO ()</code>
 </pre>
 <p>Set routing rules.</p>
-<a class="anchor" id="util-storage"></a>
+<a class="anchor" id="util-socket"></a>
 <hr>
+<h2>Util.Socket</h2>
+<p>WebSockets client API.</p>
+<h4>Public function interface</h4>
+<ul>
+   <li>newSocket</li>
+   <li>onMessage</li>
+   <li>onOpen</li>
+   <li>send</li>
+   <li>close</li>
+   <li>connectAnd</li>
+</ul>
+<hr>
+<h4>newSocket</h4>
+<pre class="api"><code class="api">newSocket :: String -&gt; IO (Maybe Socket)</code>
+</pre>
+<p>Creates a web socket or returns Nothing if the connection attempt fails.</p>
+<h4>onMessage</h4>
+<pre class="api"><code class="api"></code>
+</pre>
+<p>...</p>
+<h4>onOpen</h4>
+<pre class="api"><code class="api"></code>
+</pre>
+<p>...</p>
+<h4>send</h4>
+<pre class="api"><code class="api"></code>
+</pre>
+<p>...</p>
+<h4>close</h4>
+<pre class="api"><code class="api"></code>
+</pre>
+<p>...</p>
+<h4>connectAnd</h4>
+<pre class="api"><code class="api"></code>
+</pre>
+<p>...</p>
+
+<a class="anchor" id="util-state"></a>
+<hr>
+<h2>Util.State</h2>
+<p>Saves global application state in a hidden DOM property.</p>
+<h4>Public function interface</h4>
+<ul>
+   <li>_readState</li>
+   <li>_setState</li>
+</ul>
+<hr>
+<h4>_readState</h4>
+<pre class="api"><code class="api">setMap :: [Route] -&gt; IO ()</code>
+</pre>
+<p>abc...</p>
+<h4>_setState</h4>
+<pre class="api"><code class="api">setMap :: [Route] -&gt; IO ()</code>
+</pre>
+<p>abc...</p>
+
+<hr>
+<a class="anchor" id="util-storage"></a>
 <h2>Util.Storage</h2>
 <p>Key-value based local storage interface</p>
 <h4>Public function interface</h4>
