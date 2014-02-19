@@ -65,7 +65,9 @@ send' = __send
 close :: Socket -> IO ()
 close = __close
 
-connectAnd :: String -> (Socket -> IO ()) -> IO ()
+connectAnd :: String            -- ^ URI
+           -> (Socket -> IO ())  -- ^ Callback with socket handle as argument
+           -> IO ()
 connectAnd path go = newSocket path 
                   >>= maybe (return ()) id . fmap go 
 
