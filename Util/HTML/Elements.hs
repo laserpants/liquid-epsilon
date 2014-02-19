@@ -2,7 +2,7 @@ module Util.HTML.Elements where
 
 import Util.HTML
 
-a, article, aside, b, blockquote, body, button, canvas, code, dd, div, dl, dt, em, fieldset, footer, form, h1, h2, h3, h4, h5, h6, head, html, i, _label, menu, nav, ol, option, p, pre, q, section, select, span, sub, sup, table, tbody, td, textarea, tfoot, thead, title, tr, ul, video :: Html -> Html
+a, article, aside, b, blockquote, body, button, canvas, code, dd, div, dl, dt, em, fieldset, footer, form, h1, h2, h3, h4, h5, h6, _head, html, i, _label, menu, nav, ol, option, p, pre, q, section, select, span, sub, sup, table, tbody, td, textarea, tfoot, thead, title, tr, ul, video :: Html -> Html
 
 a          = makePar "a"
 article    = makePar "article"
@@ -27,7 +27,7 @@ h3         = makePar "h3"
 h4         = makePar "h4"
 h5         = makePar "h5"
 h6         = makePar "h6"
-head       = makePar "head"
+_head      = makePar "head"
 html       = makePar "html"
 i          = makePar "i"
 _label     = makePar "label"
