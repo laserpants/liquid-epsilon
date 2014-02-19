@@ -31,6 +31,7 @@ module Util.DOM
     , addEventListener
     , addEventListener'
     , onClick
+    , onSubmit
     , setStyleProperty
     , setStyleProperty'
     , (~>)
@@ -186,6 +187,12 @@ onClick :: Element     -- ^ The target element
         -> IO ()
 onClick el f = __wrap f >>= __onClick el 
 
+-- | Add an onSubmit event listener to the provided form element.
+onSubmit :: Element     -- ^ A form element
+         -> IO ()       -- ^ Callback action 
+         -> IO ()
+onSubmit form f = __wrap f >>= __onSubmit form 
+
 data StylePtr
 type StyleObject = Ptr StylePtr
 
@@ -251,6 +258,9 @@ foreign import js "%1.addEventListener(%2, %3, false)"
 
 foreign import js "%1.addEventListener('click', %2, false)"
     __onClick :: Element -> FunPtr (IO ()) -> IO ()
+
+foreign import js "%1.addEventListener('submit', %2, false)"
+    __onSubmit :: Element -> FunPtr (IO ()) -> IO ()
 
 foreign import js "document.write(%*)"
     __documentWrite :: PackedString -> IO ()
