@@ -72,6 +72,7 @@
             <li><a href="#storage">Storage</a></li>
             <li><a href="#router">Router</a></li>
             <li><a href="#state">State</a></li>
+            <li><a href="#socket">Socket</a></li>
             <li><a href="#common-errors">Common errors</a></li>
           </ul>
         </div>
@@ -1842,6 +1843,7 @@ addFriend f = do
 </pre>
 <blockquote class="intro">The WebSocket protocol enables full-duplex communication over a single TCP connection.</blockquote> 
 <p>Read more about the WebSocket specification <a href="http://www.websocket.org/">here</a>.</p>
+<h4>The <code>connectAnd</code> helper</h4>
 <p>The easiest way to implement a WebSocket client using <code>Util.Socket</code> is to take advantage of the <code>connectAnd</code> helper function:</p>
 <pre><code>connectAnd :: String              -- ^ URI
            -> (Socket -> IO ())   -- ^ Callback with socket handle as argument
