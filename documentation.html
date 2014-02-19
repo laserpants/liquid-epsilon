@@ -528,30 +528,36 @@ portion of the current URL.</p>
 </ul>
 <hr>
 <h4>newSocket</h4>
-<pre class="api"><code class="api">newSocket :: String -&gt; IO (Maybe Socket)</code>
+<pre class="api"><code class="api">newSocket :: String -&gt; IO (Maybe Socket)
+newSocket' :: PackedString -&gt; IO (Maybe Socket)</code>
 </pre>
 <p>Creates a web socket or returns Nothing if the connection attempt fails.</p>
 <h4>onMessage</h4>
-<pre class="api"><code class="api"></code>
-</pre>
-<p>...</p>
+<pre class="api"><code class="api">onMessage :: Socket -&gt; (String -&gt; IO ()) -&gt; IO ()</code></pre>
+<p>Event listener to handle incoming messages.</p>
 <h4>onOpen</h4>
-<pre class="api"><code class="api"></code>
+<pre class="api"><code class="api">onOpen :: Socket -&gt; IO () -&gt; IO ()</code>
 </pre>
-<p>...</p>
+<p>Event listener called after a connection is successfully opened.</p>
 <h4>send</h4>
-<pre class="api"><code class="api"></code>
+<pre class="api"><code class="api">send :: Socket -&gt; String -&gt; IO ()
+send' :: Socket -&gt; PackedString -&gt; IO ()</code>
 </pre>
-<p>...</p>
+<p>Send a message on a socket.</p>
 <h4>close</h4>
-<pre class="api"><code class="api"></code>
+<pre class="api"><code class="api">close :: Socket -&gt; IO ()</code>
 </pre>
-<p>...</p>
+<p>Close a socket.</p>
 <h4>connectAnd</h4>
-<pre class="api"><code class="api"></code>
+<pre class="api"><code class="api">connectAnd :: String -&gt; (Socket -&gt; IO ()) -&gt; IO ()</code>
 </pre>
-<p>...</p>
-
+<p>Convenience function for opening a connection.</p>
+<p><b>Example use:</b></p>
+<pre><code>connectAnd "ws://localhost:9160" $ \sock -> do
+    onOpen sock $ do
+        send sock $ "Hi!"
+    onMessage sock $ \msg -> do
+        -- Process incoming message here...</code></pre>
 <a class="anchor" id="util-state"></a>
 <hr>
 <h2>Util.State</h2>
@@ -565,12 +571,25 @@ portion of the current URL.</p>
 <h4>_readState</h4>
 <pre class="api"><code class="api">_readState :: String -&gt; IO a</code>
 </pre>
-<p>abc...</p>
+<p>
+Reimplement this function with the application-specific data type used to encapsulate state. The <code>String</code> argument is used as a namespace suffix. 
+</p>
+<pre><code>data MyAppState = MyAppState
+    { ... }
+    
+readState :: IO MyAppState
+readState = _readState "app_state"</code></pre>
 <h4>_setState</h4>
 <pre class="api"><code class="api">_setState :: String -&gt; a -&gt; IO ()</code>
 </pre>
-<p>abc...</p>
-
+<p>
+Reimplement this function with the application-specific data type used to encapsulate state. The <code>String</code> argument is used as a namespace suffix.
+</p>
+<pre><code>data MyAppState = MyAppState
+    { ... }
+    
+setState :: MyAppState -&gt; IO ()
+setState = _setState "app_state"</code></pre>
 <a class="anchor" id="util-storage"></a>
 <hr>
 <h2>Util.Storage</h2>
