@@ -1845,6 +1845,20 @@ addFriend f = do
     (AppState u fs) <- readState
     setState $ AppState u (f:fs) </code>
 </pre>
+<h4>Initial state</h4>
+<p>--</p>
+<pre>
+<code>initialState :: AppState
+initialState = AppState "-" []
+
+main :: IO ()
+main = do
+    wrap $ do
+        setState initialState
+        -- rest of the application here
+
+    >>= onReady</code>
+</pre>
 <hr>
 <a class="anchor" id="socket"></a>
 <h2>Socket</h2>
