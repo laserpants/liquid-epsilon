@@ -581,7 +581,7 @@ send' :: Socket -&gt; PackedString -&gt; IO ()</code>
     readState = _readState ""
     setState  = _setState  ""</code>
 </pre>
-<p>Unless you need more than a single <code>IsState</code> instance, it is sufficient to implement <code>initState</code> with a default value.</p>
+<p>Unless you need more than a single <code>IsState</code> instance, it is sufficient to implement <code>initState</code> to provide a default value (used when reading from an empty store).</p>
 <h4>_readState</h4>
 <pre class="api"><code class="api">_readState :: String -&gt; IO a</code>
 </pre>

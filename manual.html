@@ -1,83 +1,83 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="shortcut icon" href="../../assets/ico/favicon.ico">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="">
+<meta name="author" content="">
+<link rel="shortcut icon" href="../../assets/ico/favicon.ico">
 
-    <style type="text/css">
-        .anchor { display: block; position: relative; top: -70px; visibility: hidden; }
-        h2 code, h3 code, h4 code { color: #333; }
-        h4 { margin-top: 20px !important; }
-        blockquote.intro { border:none; padding-left:0; margin-bottom:0; }
-    </style>
+<style type="text/css">
+    .anchor { display: block; position: relative; top: -70px; visibility: hidden; }
+    h2 code, h3 code, h4 code { color: #333; }
+    h4 { margin-top: 20px !important; }
+    blockquote.intro { border:none; padding-left:0; margin-bottom:0; }
+</style>
 
-    <title>Liquid Epsilon Manual</title>
+<title>Liquid Epsilon Manual</title>
 
-    <!-- Bootstrap core CSS -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
+<!-- Bootstrap core CSS -->
+<link href="css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Custom styles for this template -->
-    <link href="css/dashboard.css" rel="stylesheet">
+<!-- Custom styles for this template -->
+<link href="css/dashboard.css" rel="stylesheet">
 
-    <!-- Just for debugging purposes. Don't actually copy this line! -->
-    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+<!-- Just for debugging purposes. Don't actually copy this line! -->
+<!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
 
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-  </head>
+<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+</head>
 
-  <body>
+<body>
 
-    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-      <div class="container-fluid">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="/liquid-epsilon">Liquid Epsilon</a>
-          <ul class="nav navbar-nav">
-            <li><a href="/liquid-epsilon">Home</a></li>
-            <li class="active"><a href="#">Manual</a></li>
-            <li><a href="documentation.html">Documentation</a></li>
-            <li><a href="examples.html">Examples</a></li>
-            <li><a href="https://github.com/johanneshilden/liquid-epsilon">Download</a></li>
-         </ul>
-        </div>
-      </div>
-    </div>
-
+<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container-fluid">
-      <div class="row">
-        <div class="col-sm-3 col-md-2 sidebar">
-          <ul class="nav nav-sidebar">
-            <li><a href="#overview">Overview</a></li>
-            <li><a href="#hello-world">Hello world</a></li>
-            <li><a href="#dom">DOM</a></li>
-            <li><a href="#string">String</a></li>
-            <li><a href="#html">HTML</a></li>
-            <li><a href="#json">JSON</a></li>
-            <li><a href="#handlebars">Handlebars</a></li>
-            <li><a href="#handlebars-html">Handlebars HTML</a></li>
-            <li><a href="#frp">FRP</a></li>
-            <li><a href="#storage">Storage</a></li>
-            <li><a href="#router">Router</a></li>
-            <li><a href="#state">State</a></li>
-            <li><a href="#socket">Socket</a></li>
-            <li><a href="#common-errors">Common errors</a></li>
-          </ul>
-        </div>
-        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-          <h1 class="page-header">Manual</h2>
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="/liquid-epsilon">Liquid Epsilon</a>
+        <ul class="nav navbar-nav">
+        <li><a href="/liquid-epsilon">Home</a></li>
+        <li class="active"><a href="#">Manual</a></li>
+        <li><a href="documentation.html">Documentation</a></li>
+        <li><a href="examples.html">Examples</a></li>
+        <li><a href="https://github.com/johanneshilden/liquid-epsilon">Download</a></li>
+        </ul>
+    </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="row">
+    <div class="col-sm-3 col-md-2 sidebar">
+        <ul class="nav nav-sidebar">
+        <li><a href="#overview">Overview</a></li>
+        <li><a href="#hello-world">Hello world</a></li>
+        <li><a href="#dom">DOM</a></li>
+        <li><a href="#string">String</a></li>
+        <li><a href="#html">HTML</a></li>
+        <li><a href="#json">JSON</a></li>
+        <li><a href="#handlebars">Handlebars</a></li>
+        <li><a href="#handlebars-html">Handlebars HTML</a></li>
+        <li><a href="#frp">FRP</a></li>
+        <li><a href="#storage">Storage</a></li>
+        <li><a href="#router">Router</a></li>
+        <li><a href="#state">State</a></li>
+        <li><a href="#socket">Socket</a></li>
+        <li><a href="#common-errors">Common errors</a></li>
+        </ul>
+    </div>
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+        <h1 class="page-header">Manual</h2>
 
 <blockquote><p>Liquid Epsilon is a smorgasbord of modules for building
 single-page, client-side web and mobile applications, using Haskell
@@ -1826,7 +1826,7 @@ out str = getElementById "myStdOut" &gt;&gt;= sequence_ . maybeToList . f
     setState  = _setState  ""</code>
 </pre>
 <h4>How to use</h4>
-<p>Create a data type with the state you want to make available to your application. Instantiate <code>IsState</code> and provide an implementation of <code>initState</code>.</p>
+<p>Create a data type with the state you want to make available to your application. Instantiate <code>IsState</code> and provide an implementation for <code>initState</code>.</p>
 <pre>
 <code>data AppState = AppState
     { user    :: String
@@ -1836,7 +1836,7 @@ out str = getElementById "myStdOut" &gt;&gt;= sequence_ . maybeToList . f
 instance IsState AppState where
     initState = AppState "" []</code>
 </pre>
-<p>To allow multiple instances within a single application, you also need to reimplement <code>readState</code> and <code>setState</code> with a namespace identifier for each instance.</p>
+<p>To allow multiple instances within a single application, you also need to reimplement <code>readState</code> and <code>setState</code> with a namespace identifier for each instance. Do not call <code>_readState</code> or <code>_setState</code> directly from application code. Instead, see below how these functions are used when instantiating <code>IsState</code>.</p>
 <pre>
 <code>instance IsState AppState where
     initState = AppState "" []
@@ -1844,7 +1844,7 @@ instance IsState AppState where
     setState  = _setState  "app_state"</code>
 </pre>
 <p>
-Behind the scenes, the data is written to a hidden <code>__state__</code> attribute on the window object. The <code>app_state</code> suffix is added to to the name and thereby acts as a simple namespace.</p>
+Behind the scenes, the data is written to a hidden <code>__state__</code> attribute on the window DOM object. The <code>app_state</code> suffix is added to to the name and thereby acts as a simple namespace.</p>
 <p>
 This is how you typically use <code>readState</code> and <code>setState</code> in your application:
 </p>
