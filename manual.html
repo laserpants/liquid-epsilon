@@ -1817,24 +1817,25 @@ out str = getElementById "myStdOut" &gt;&gt;= sequence_ . maybeToList . f
 </pre>
 <blockquote class="intro">This module takes advantage of the DOM tree and a hidden property to store global application state.</blockquote> 
 <blockquote>
-    <small><strong>Note:</strong> Do not call <code style="color:#777">_readState</code> or <code style="color:#777">_setState</code> directly from application code. Instead, first create type-safe wrappers as described below.</small>
+    <small><strong>Note:</strong> Do not call <code style="color:#777">_readState</code> or <code style="color:#777">_setState</code> directly from application code. See below for instructions on how these functions are typically used.</small>
 </blockquote>
 <h4>How to use</h4>
-<p>Create a data type with the state you want to make available to your application and reimplement <code>_readState</code> and <code>_setState</code> accordingly.
+<pre>
+<code>abc</code>
+</pre>
+<p>Create a data type with the state you want to make available to your application. Instantiate <code>IsState</code> and provide an implementation of <code>initState</code>.</p>
 <pre>
 <code>data AppState = AppState
     { user    :: String
     , friends :: [String]
     }
     
-readState :: IO AppState
-readState = _readState "app_state"
-
-setState :: AppState -&gt; IO ()
-setState = _setState "app_state"</code>
+instance IsState AppState where
+    initState = AppState "" []</code>
 </pre>
+<p>If </p>
 <p>
-Behind the scenes, the data is written to a <code>__state__app_state</code> attribute on the window object. The <code>app_state</code> suffix acts as a simple namespace to allow multiple state objects within a single application. Alternatively, you can simply specify the empty <code>String</code> to use the <code>__state__</code> attribute on its own (e.g. <code>_setState ""</code>).
+Behind the scenes, the data is written to a hidden (actually, it just has an obscure name) attribute on the window object. The <code>app_state</code> suffix acts as a simple namespace to allow multiple state objects within a single application. Alternatively, you can simply specify the empty <code>String</code> to use the <code>__state__</code> attribute on its own (e.g. <code>_setState ""</code>).
 </p>
 <p>
 This is how you typically use these functions:
@@ -1844,20 +1845,6 @@ This is how you typically use these functions:
 addFriend f = do
     (AppState u fs) <- readState
     setState $ AppState u (f:fs) </code>
-</pre>
-<h4>Initial state</h4>
-<p>--</p>
-<pre>
-<code>initialState :: AppState
-initialState = AppState "-" []
-
-main :: IO ()
-main = do
-    wrap $ do
-        setState initialState
-        -- rest of the application here
-
-    >>= onReady</code>
 </pre>
 <hr>
 <a class="anchor" id="socket"></a>
