@@ -1821,7 +1821,7 @@ out str = getElementById "myStdOut" &gt;&gt;= sequence_ . maybeToList . f
 </blockquote>
 <h4>How to use</h4>
 <pre>
-<code>abc</code>
+<code>x</code>
 </pre>
 <p>Create a data type with the state you want to make available to your application. Instantiate <code>IsState</code> and provide an implementation of <code>initState</code>.</p>
 <pre>
@@ -1833,7 +1833,7 @@ out str = getElementById "myStdOut" &gt;&gt;= sequence_ . maybeToList . f
 instance IsState AppState where
     initState = AppState "" []</code>
 </pre>
-<p>If </p>
+<p>To allow multiple state objects within a single application, you need to reimplement readState and <code>setState</code> with a unique namespace suffix:</p>
 <p>
 Behind the scenes, the data is written to a hidden (actually, it just has an obscure name) attribute on the window object. The <code>app_state</code> suffix acts as a simple namespace to allow multiple state objects within a single application. Alternatively, you can simply specify the empty <code>String</code> to use the <code>__state__</code> attribute on its own (e.g. <code>_setState ""</code>).
 </p>
