@@ -573,28 +573,28 @@ send' :: Socket -&gt; PackedString -&gt; IO ()</code>
    <li>_setState</li>
 </ul>
 <hr>
+<h4>IsState</h4>
+<pre class="api"><code class="api">class IsState a where
+    readState :: IO a
+    setState  :: a -> IO ()
+    initState :: a
+    readState = _readState ""
+    setState  = _setState  ""</code>
+</pre>
+<p>Unless you need more than a single <code>IsState</code> instance, it is sufficient to implement <code>initState</code> with a default value.</p>
 <h4>_readState</h4>
 <pre class="api"><code class="api">_readState :: String -&gt; IO a</code>
 </pre>
-<p>
-Reimplement this function with the application-specific data type used to encapsulate state. The <code>String</code> argument is used as a namespace suffix. 
-</p>
-<pre><code>data MyAppState = MyAppState
-    { ... }
-    
-readState :: IO MyAppState
-readState = _readState "app_state"</code></pre>
 <h4>_setState</h4>
 <pre class="api"><code class="api">_setState :: String -&gt; a -&gt; IO ()</code>
 </pre>
 <p>
-Reimplement this function with the application-specific data type used to encapsulate state. The <code>String</code> argument is used as a namespace suffix.
+Use these functions to reimplement <code>setState</code> with a unique namespace identifier if you need multiple <code>IsState</code> instances within a single application.
 </p>
-<pre><code>data MyAppState = MyAppState
-    { ... }
-    
-setState :: MyAppState -&gt; IO ()
-setState = _setState "app_state"</code></pre>
+<pre><code>instance IsState AppState where
+    initState = AppState "" []
+    readState = _readState "app_state"
+    setState  = _setState  "app_state"</code></pre>
 <a class="anchor" id="util-storage"></a>
 <hr>
 <h2>Util.Storage</h2>
