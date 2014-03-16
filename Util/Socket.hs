@@ -1,13 +1,15 @@
 module Util.Socket 
     ( Socket
+    , close
+    , connectAnd
     , newSocket
     , newSocket'
+    , onClose
+    , onError
     , onMessage
     , onOpen
     , send
     , send'
-    , close
-    , connectAnd
     ) where
 
 import UHC.Ptr
@@ -50,9 +52,20 @@ onMessage sock f = do
     __set (pack "onmessage") f' sock >> return ()
 
 onOpen :: Socket -> IO () -> IO ()
-onOpen sock f = do
+onOpen = socketEvent "onopen"
+
+onError :: Socket -> IO () -> IO ()
+onError = socketEvent "onerror"
+
+onClose :: Socket -> (String -> IO ()) -> IO ()
+onClose sock f = do
+    f' <- __wrap1 $ f . unpack . __eventReason
+    __set (pack "onclose") f' sock >> return ()
+
+socketEvent :: String -> Socket -> IO () -> IO ()
+socketEvent event sock f = do
     f' <- wrap f
-    __set (pack "onopen") f' sock >> return ()
+    __set (pack event) f' sock >> return ()
 
 -- | Send a message on a socket.
 send :: Socket -> String -> IO ()
@@ -73,6 +86,9 @@ connectAnd path go = newSocket path
 
 foreign import js "%1.data"
     __eventData :: a -> PackedString
+
+foreign import js "%1.reason"
+    __eventReason :: a -> PackedString
 
 foreign import prim "primSetAttr"
     __set :: PackedString -> a -> Ptr p -> IO (Ptr p)
